@@ -2,7 +2,7 @@
 
 function loadRestaurantMenu() {
    $.ajax({
-      url: "http://192.168.0.172:8080/mobile-1.0/rest/menu/1",
+      url: "http://mobile-kstane.rhcloud.com/rest/menu/1",
       cache: false,
       success: function(data) {
          var categoryList = data.fullMenu.categoryList;
