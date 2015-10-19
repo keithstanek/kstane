@@ -40,6 +40,13 @@ jQuery(function($) {'use strict';
 
 		loadCartText();
 
+		if (showCheckoutModal) {
+			//alert("document loaded [" + showCheckoutModal + "]");
+			loadCheckoutModal();
+			loadCartSummary();
+		}
+
+
 		// $('.main-slider').addClass('animate-in');
 		// $('.preloader').remove();
 		//End Preloader
@@ -185,4 +192,17 @@ function getCondimentById(id) {
 
 function getItemList() {
 	 return JSON.parse(window.sessionStorage.getItem("itemList"));
+}
+
+function buildCondimentList(condiments) {
+	if (condiments.length !== 0) {
+		var condimentDictionary = JSON.parse(window.sessionStorage.getItem("condimentList"));
+		var returnString = " - ";
+		for (var counter = 0; counter < condiments.length; counter++) {
+		  returnString = returnString + condimentDictionary[condiments[counter]].name + ", ";
+		}
+		return returnString.substring(0, returnString.length - 2);
+  } else {
+	  return "";
+  }
 }

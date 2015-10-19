@@ -76,33 +76,24 @@
     }
     .category-underline {
       border-bottom: 1px rgba(0, 0, 0, 0.25) solid;
-   }
+    }
+    .summary-cell {
+      border-bottom: 1px rgba(0, 0, 0, 0.25) solid;
+    }
     </style>
     <section id="services">
       <div class="container">
          <div class="row">
              <div class="col-sm-12">
-                 <div class="testimonial bottom">
+                 <div id="order-summary" class="testimonial bottom">
                      <div class="category-underline"><h3><span class="category-header">Order Summary</span></h3></div>
-                     <div>
-                        <div class="item-cell">[2]&nbsp;&nbsp;</div>
-                        <div class="item-cell">Whatta-Burger with cheese - Lettuce, Tomatoe, Onion, Pickle, Ketchup, Mustard, Bacon</div>
-                     </div>
-                     <div>
-                        <div class="item-cell">[1]&nbsp;&nbsp;</div>
-                        <div class="item-cell">French Fries - Large</div>
-                     </div>
-                     <div>
-                        <div class="item-cell">[1]&nbsp;&nbsp;</div>
-                        <div class="item-cell">Large Drink - Sweet Tea</div>
-                     </div>
-                     <p></p>
-                     <p>
-                        <!-- <input type="checkbox" id="chkConfirm" checked="false" value="1"> -->
-                        Please review your order for accuracy. Click the buttons below to modify your order.<br>
-                        <a href="view_cart.html" class="btn btn-xs btn-success">Modify Cart</a> or <a href="menu.html" class="btn btn-xs btn-success">Add More Items</a>
-                     </p>
                  </div>
+                 <p></p>
+                 <p>
+                    <!-- <input type="checkbox" id="chkConfirm" checked="false" value="1"> -->
+                    Please review your order for accuracy. Click the buttons below to modify your order.<br>
+                    <a href="view_cart.html" class="btn btn-xs btn-success">Modify Cart</a> or <a href="menu.html" class="btn btn-xs btn-success">Add More Items</a>
+                 </p>
              </div>
              <!-- <div class="col-sm-12" style="box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);"> -->
              <div class="col-sm-12">
@@ -110,73 +101,74 @@
                     <div class="category-underline">
                      <h3><span class="category-header">Payment Info</span></h3></div>
                      <p>
-                        <b>Amount Due: $23.90</b>
+                        <b>Amount Due: $<span id="summary-total"></span></b>
                         <form>
                         <div>
-                           <div style="display: table-cell"><input type="radio" name="paymentType" onclick="toggleCCDiv();" checked id="rdoPayAtStore" value="pay-at-store">&nbsp;&nbsp;</div>
-                           <div style="display: table-cell">Pay at pick-up time - <span style="color: red">** NOTE: You can pay with your credit/debit/gift card at the store.</span></div>
+                           <div class="item-cell"><input type="radio" name="paymentType" onclick="toggleCCDiv();" checked id="rdoPayAtStore" value="pay-at-store">&nbsp;&nbsp;</div>
+                           <div class="item-cell">Pay at pick-up time - <span style="color: red">** NOTE: You can pay with your credit/debit/gift card at the store.</span></div>
                         </div>
                         <div>
-                           <div style="display: table-cell"><input type="radio" name="paymentType" onclick="toggleCCDiv();" id="rdoCCPayment" value="credit-card">&nbsp;&nbsp;</div>
-                           <div style="display: table-cell">Credit Card</div>
+                           <div class="item-cell"><input type="radio" name="paymentType" onclick="toggleCCDiv();" id="rdoCCPayment" value="credit-card">&nbsp;&nbsp;</div>
+                           <div class="item-cell">Credit Card</div>
                         </div>
-                        <div id="ccpaymentinfo" style="display: none">
-                              <br>
-                              <div class="form-group">
-                                 Card Number:<br>
-                                 <input type="text" id="delivary-name" placeholder="1234 1234 1234 1234" size="40">
-                              </div>
-                              <div class="form-group">
-                                 Expiration Date:<br>
-                                 <select id="ccExpireMonth">
-                                    <option value="">month</option>
-                                    <option value="01">01</option>
-                                    <option value="02">02</option>
-                                    <option value="03">03</option>
-                                    <option value="04">04</option>
-                                    <option value="05">05</option>
-                                    <option value="06">06</option>
-                                    <option value="07">07</option>
-                                    <option value="08">08</option>
-                                    <option value="09">09</option>
-                                    <option value="10">10</option>
-                                    <option value="11">11</option>
-                                    <option value="12">12</option>
-                                 </select>&nbsp:&nbsp;
-                                 <select id="ccExpireYear">
-                                    <option value="">year</option>
-                                    <option value="2016">2016</option>
-                                    <option value="2017">2017</option>
-                                    <option value="2018">2018</option>
-                                    <option value="2019">2019</option>
-                                    <option value="2020">2020</option>
-                                 </select>
-                              </div>
-                              <div class="form-group">
-                                 Security Code:<br>
-                                 <input type="text" id="ccSecurityCode" placeholder="123" size="10">
-                              </div>
-                              <div class="form-group">
-                                 Zip Code:<br>
-                                 <input type="text" id="ccZipCode" placeholder="123" size="10">
-                              </div>
-                           </form>
+                        <div id="ccpaymentinfo" style="display: none; margin-left: 19px;">
+                           <div class="form-group">
+                              Card Number:<br>
+                              <input type="text" id="delivary-name" placeholder="1234123412341234" size="40">
+                           </div>
+                           <div class="form-group">
+                              Expiration Date:<br>
+                              <select id="ccExpireMonth">
+                                 <option value="">month</option>
+                                 <option value="01">01</option>
+                                 <option value="02">02</option>
+                                 <option value="03">03</option>
+                                 <option value="04">04</option>
+                                 <option value="05">05</option>
+                                 <option value="06">06</option>
+                                 <option value="07">07</option>
+                                 <option value="08">08</option>
+                                 <option value="09">09</option>
+                                 <option value="10">10</option>
+                                 <option value="11">11</option>
+                                 <option value="12">12</option>
+                              </select>&nbsp:&nbsp;
+                              <select id="ccExpireYear">
+                                 <option value="">year</option>
+                                 <option value="2016">2016</option>
+                                 <option value="2017">2017</option>
+                                 <option value="2018">2018</option>
+                                 <option value="2019">2019</option>
+                                 <option value="2020">2020</option>
+                              </select>
+                           </div>
+                           <div class="form-group">
+                              Security Code:<br>
+                              <input type="text" id="ccSecurityCode" placeholder="123" size="10">
+                           </div>
+                           <div class="form-group">
+                              Zip Code:<br>
+                              <input type="text" id="ccZipCode" placeholder="123" size="10">
+                           </div>
                         </div>
+                        </form>
                      </p>
-
                   </div>
-                 </div>
+             </div>
              <div class="col-sm-12"  id="delivery-info">
                  <div class="contact-form bottom">
-                     <div class="category-underline"><h3>
-                        <span class="category-header">Your Information</span></h3></div>
+                     <div class="category-underline"><h3><span class="category-header">Contact Information</span></h3></div>
                      <form>
                         <br>
+                        <div class="form-group" style="font-weight: bold;">
+                           Order Type: &nbsp;<span id="txtOrderType"></span><br>
+                           <input type="button" onclick="loadCheckoutModal(); return false;" value="Change Order Type" class="btn btn-xs btn-success" />
+                        </div>
                         <div class="form-group">
                            <input type="text" id="name" placeholder="Name for Pick-up" size="40">
                         </div>
-                        <div class="form-group">
-                           <input type="text" id="delivary-address" placeholder="Address - Russelville Only" size="40">
+                        <div class="form-group" id="div-delivary-address"  style="display: none;">
+                           <input type="text" id="delivary-address" placeholder="Delivary Address - Russelville Only" size="40">
                         </div>
                         <div class="form-group">
                            <input type="text" id="email" placeholder="Email" size="40">
@@ -190,7 +182,7 @@
              <div class="col-sm-12">
                  <div class="text-center">
                      <p>
-                        <input type="button" class="btn btn-lg btn-primary" value="Place Order">
+                        <input type="button" id="btnOrder" onclick="submitOrder();" class="btn btn-lg btn-primary" value="Place Order">
                         <a href="index.html" class="btn btn-lg btn-danger">Cancel</a>
                      </p>
                  </div>
@@ -199,37 +191,88 @@
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                      <h4 class="modal-title">Order Type</h4>
+                      <h4 class="modal-title">Choose Order Type</h4>
                     </div>
                     <div class="modal-body">
                       <p>
-                        Do you want to <br>
-                        <input type="button" value="Dine In" class="btn btn-lg btn-primary" onclick="gotoStep2('DineIn')">
-                        <input type="button" value="Pick Up" class="btn btn-lg btn-primary" onclick="gotoStep2('Pick Up')">
-                        <input type="button" value="Delivary" class="btn btn-lg btn-primary" onclick="gotoStep2('Delivary')"><br>
-                        <span style="color: red;">
-                           ** There is a 15% charge for delivary
-                           ** Delivary service is only available in Russellville city limits.
-                        </span>
+                        <div style="text-align: center;">
+                           <h3><span style="font-weight: bold;">Do you want to:</span></h3>
+                           <input type="button" value="Dine In" class="btn btn-primary" onclick="stepTwo('Dine In')">
+                           <input type="button" value="Pick Up" class="btn btn-primary" onclick="stepTwo('Pick Up')">
+                           <input type="button" value="Delivary" class="btn btn-primary" onclick="stepTwo('Delivary')"><br>
+                        </div>
+                        <p></p>
+                        <p>
+                           <span style="color: red; font-weight: bold;">
+                              ** There is a 15% charge for delivary<br>
+                              ** Delivary service is only available in Russellville city limits.
+                           </span>
+                        </p>
                       </p>
                     </div>
                     <div class="modal-footer"></div>
-                  </div><!-- /.modal-content -->
-                </div><!-- /.modal-dialog -->
-              </div><!-- /.modal -->
+                  </div>
+                </div>
+              </div>
          </div>
       </div>
     </section>
     <!--/#footer-->
 
     <script type="text/javascript">
+    var showCheckoutModal = true;
+    var loadMenu = false;
+    var loadCart = false;
+
     function toggleCCDiv() {
       if ($("#rdoCCPayment").is(":checked")) {
          $("#ccpaymentinfo").show();
       } else {
          $("#ccpaymentinfo").hide();
       }
+   }
+
+   function submitOrder() {
+      alert("submitting order")
+   }
+
+   var orderType = "";
+
+   function loadCheckoutModal() {
+      $("#div-delivary-address").hide();
+      $("#modal-1").modal({
+         visibility: 'show',
+         backdrop: 'static',
+         keyboard: false});
+
+   }
+
+   function stepTwo(val) {
+      $("#modal-1").modal('hide');
+      orderType = val;
+      if (orderType === "Delivary") {
+         $("#div-delivary-address").toggle();
+      }
+      $("#txtOrderType").text(orderType);
+   }
+
+   function loadCartSummary() {
+      var cart = JSON.parse(window.sessionStorage.getItem("cart"));
+   	var itemList = getItemList();
+      var total = 0;
+      for (var i =0; i < cart.items.length; i++) {
+   		if (cart.items[i] === null) {
+   			//alert("cart item null for item [" + i + "]")
+   			continue;
+   		}
+   		var item =  JSON.parse(itemList[cart.items[i].id]);
+         total += (cart.items[i].quantity * cart.items[i].price);
+
+         var div = "<div><div class=\"item-cell\">[" + cart.items[i].quantity + "]&nbsp;&nbsp;</div>" +
+               "<div class=\"item-cell\">" + item.name + buildCondimentList(cart.items[i].condiments) + "</div></div>";
+     		$("#order-summary").append(div).trigger("create");
+   	}
+      $("#summary-total").text(formatNumber(total));
    }
 
     </script>

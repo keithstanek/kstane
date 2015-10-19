@@ -11,6 +11,14 @@
   @import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,600,700);
   @import url(http://fonts.googleapis.com/css?family=Noto+Sans:400,700);
 
+  .modal, .modal.fade.in {
+    top: 25%; /* was 10% */
+  }
+
+  .panel-heading {
+    cursor: pointer;
+}
+
   body {
     background: #fff;
     font-family: 'Lato', sans-serif;

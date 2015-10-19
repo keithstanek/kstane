@@ -2,7 +2,8 @@
 
 function loadRestaurantMenu() {
    $.ajax({
-      url: "http://mobile-kstane.rhcloud.com/rest/menu/1",
+      //url: "http://mobile-kstane.rhcloud.com/rest/menu/1",
+      url: "http://192.168.0.172:8080/mobile-1.0/rest/menu/1",
       cache: false,
       success: function(data) {
          var categoryList = data.fullMenu.categoryList;
@@ -74,7 +75,7 @@ function addCondimentsToMenuItem(condiments, item) {
          }
          var html = "<li><input name=\"condiment_item_" + item.id + "\" id=\"chkbxCondimentId_" + condiment + "\" " +
                 "value=\"" + condiment + "\" type=\"" + checkboxType + "\" " + itemChecked + " /> " +
-                "<label for=\"condiment_item_" + item.id + "\">" + name + "</label></li>";
+                "<label for=\"chkbxCondimentId_" + condiment + "\">" + name + "</label></li>";
 
          if (condimentDictionary[condiment].upSell == true) {
             upSellList += html;
@@ -213,12 +214,11 @@ function getValueFromFormFields(fields, startsWithString, isReplaceValue, replac
 
 function addItemToCategory(id, name, appendTo, price) {
    var div = "<div class=\"panel panel-default\">" +
-       "<div class=\"panel-heading\" style=\"background-color: #" + itemHeaderBgColor + "; color: #" + itemHeaderFontColor + "\">" +
-       "     <h4 class=\"panel-title\">" +
-       "        <a data-toggle=\"collapse\" data-parent=\"#" + appendTo + "\" href=\"#" + id + "\">" + name + " - $" + formatNumber(price) + "</a>" +
-       "     </h4>" +
+       "<div data-toggle=\"collapse\" data-parent=\"#" + appendTo + "\" data-target=\"#item_panel_" + id +
+       "\" class=\"panel-heading\" style=\"background-color: #" + itemHeaderBgColor + "; color: #" + itemHeaderFontColor + "\">" +
+       "     <h4 class=\"panel-title\">" + name + " - $" + formatNumber(price) + "</h4>" +
        "</div>" +
-       "<div id=\"" + id + "\" class=\"panel-collapse collapse\" style=\"background-color: #" + itemPanelBgColor + "\">" +
+       "<div id=\"item_panel_" + id + "\" class=\"panel-collapse collapse\" style=\"background-color: #" + itemPanelBgColor + "\">" +
       "     <div class=\"panel-body\"><div  id=\"" + id + "_condiments\"></div>" +
       " </div></div>";
        //alert(div);
@@ -227,12 +227,11 @@ function addItemToCategory(id, name, appendTo, price) {
 
 function addCollapsableRow(id, name, appendTo) {
    var div = "<div class=\"panel panel-default\">" +
-       "<div class=\"panel-heading\" style=\"background-color: #" + categoryHeaderBgColor + "; color: #" + categoryHeaderFontColor + "\">" +
-       "     <h4 class=\"panel-title\">" +
-       "        <a data-toggle=\"collapse\" data-parent=\"#" + appendTo + "\" href=\"#" + id + "\">" + name + "</a>" +
-       "     </h4>" +
+       "<div data-toggle=\"collapse\" data-parent=\"#" + appendTo + "\" data-target=\"#category_panel_" + id +
+       "\" class=\"panel-heading\" style=\"background-color: #" + categoryHeaderBgColor + "; color: #" + categoryHeaderFontColor + "\">" +
+       "     <h4 class=\"panel-title\">" + name + "</h4>" +
        "</div>" +
-       "<div id=\"" + id + "\" class=\"panel-collapse collapse\" style=\"background-color: #" + categoryPanelBgColor + "\">" +
+       "<div id=\"category_panel_" + id + "\" class=\"panel-collapse collapse\" style=\"background-color: #" + categoryPanelBgColor + "\">" +
       "     <div class=\"panel-body\" ><div class=\"panel-group\" id=\"" + id + "_accordion\"></div>" +
       " </div></div>";
       // alert(div);

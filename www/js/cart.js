@@ -27,19 +27,6 @@ function loadCartView() {
    calculateCartTotals();
 }
 
-function buildCondimentList(condiments) {
-	if (condiments.length !== 0) {
-		var condimentDictionary = JSON.parse(window.sessionStorage.getItem("condimentList"));
-		var returnString = " - ";
-		for (var counter = 0; counter < condiments.length; counter++) {
-		  returnString = returnString + condimentDictionary[condiments[counter]].name + ", ";
-		}
-		return returnString.substring(0, returnString.length - 2);
-  } else {
-	  return "";
-  }
-}
-
 function updateCart(cartIdentifierId) {
 	 if ( isNaN($("#item_" + cartIdentifierId + "_quantity").val()) ) {
       $("#errorMessage").text("Invalid Cart Amount [" + $("#item_" + cartIdentifierId + "_quantity").val() + "]. Please adjust the amount to continue");
