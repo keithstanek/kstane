@@ -29,6 +29,14 @@ jQuery(function($) {'use strict';
 
 	// portfolio filter
 	$(document).ready(function(){
+		// on initial load, go get the infomration
+		if (page === "index") {
+			getRestaurantInfo();
+			return;
+		}
+
+		addVarToSession(CURRENT_PAGE_SESSION_KEY, page); // for redirect on resume of app -- after the above check
+
 		// first check to make sure they are logged in, either as a person or guest
 		var userLoggedIn = loggedIn();
 		if (!userLoggedIn &&  page !== "login") {
@@ -175,6 +183,9 @@ function loadCartText() {
 	var cartTotal = 0;
 	if (cart !== "") {
 		cart = JSON.parse(cart);
+		if (cart === null) {
+			return; // this could happen on the app load page (index.html)
+		}
 		var quantity = 0;
 		for (var i =0; i < cart.items.length; i++) {
 			if (cart.items[i] !== null) {
@@ -214,7 +225,7 @@ function getItemById(itemId) {
 }
 
 function getCondimentById(id) {
-	var condimentList = JSON.parse(window.sessionStorage.getItem("condimentList"));
+	var condimentList = getJsonFromSession(CONDIMENT_LIST_SESSION_KEY);
 	for (var i =0; i < condimentList.length; i++) {
 		if (condimentList[i] === null) {
 			continue;
@@ -226,7 +237,7 @@ function getCondimentById(id) {
 }
 
 function isStoreOpen() {
-	var restaurant = JSON.parse(window.sessionStorage.getItem("restaurant"));
+	var restaurant = getJsonFromSession(RESTAURANT_SESSION_KEY);
 	var openTime = restaurant.timeOpen;
 	var closeTime = restaurant.timeClose;
 
@@ -294,6 +305,49 @@ function getRestaurantIdFromSession() {
 function getFranchiseIdFromSession() {
 	var restaurantInfo = JSON.parse(window.sessionStorage.getItem(RESTAURANT_SESSION_KEY));
 	return restaurantInfo.franchiseId;
+}
+
+function getRestaurantInfo() {
+	$.ajax({
+      url: MENU_URL,  // defined in constants.js
+      cache: false,
+      success: function(data) {
+         //alert(data);
+         var response = JSON.parse(data);
+         var categoryList = response.menu.categories;
+         var condiments = response.condiments;
+
+         for (var x = 0; x < condiments.length; x++) {
+            var c = condiments[x];
+            condimentDictionary[c.id] = c;
+         }
+
+         for (var i = 0; i < categoryList.length; i++) {
+            var itemList = categoryList[i].items;
+            for (var itemCounter = 0; itemCounter < itemList.length; itemCounter++) {
+               itemDictionary[itemList[itemCounter].id] = JSON.stringify(itemList[itemCounter]);
+            }
+         }
+
+         addJsonToSession(ITEM_LIST_SESSION_KEY, itemDictionary);
+			addJsonToSession(MENU_SESSION_KEY, response.menu);
+			addJsonToSession(RESTAURANT_SESSION_KEY, response.restaurant);
+         addJsonToSession(CONDIMENT_LIST_SESSION_KEY, condimentDictionary);
+
+			var redirectPage = getVarFromSession(CURRENT_PAGE_SESSION_KEY);
+			if (redirectPage !== null && redirectPage !== "") {
+				window.location.href = redirectPage + ".html";
+				return;
+			}
+			window.location.href = "home.html";
+      },
+      error: function(error) {
+         //console.log("error updating table -" + error.status);
+         //alert(JSON.stringify(error, null, 2))
+      },
+      complete: function() {
+      }
+   });
 }
 
 

@@ -2,6 +2,9 @@ function loadCartView() {
 	// retrieve the items from the context
 
    var cart = getJsonFromSession(CART_SESSION_KEY);
+   if (cart === null) {
+      return; // there are no items in the cart
+   }
 	var itemList = getItemList();
    for (var i =0; i < cart.items.length; i++) {
 		if (cart.items[i] === null) {
@@ -154,7 +157,7 @@ function addPromoCode() {
    }
    $.ajax({
       //url: "http://mobile-kstane.rhcloud.com/rest/menu/1",
-      url: PROMO_URL + "/" + promoCode,  // defined in constants.js
+      url: PROMO_URL + "/" + encodeURIComponent(promoCode),  // defined in constants.js
       cache: false,
       success: function(data) {
          var response = JSON.parse(data).response;
@@ -267,6 +270,14 @@ function promoItemExists(itemId) {
    }
    return false;
 }
+
+$(function() {
+  var txt = $("#txtPromo");
+  var func = function() {
+    txt.val(txt.val().replace(/[^0-9A-Za-z-]/g, ""));
+  }
+  txt.keyup(func).blur(func);
+});
 
 function getValueFromFormFields(fields, startsWithString, isReplaceValue, replaceValue) {
    var fieldValue = 0;

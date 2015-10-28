@@ -51,7 +51,7 @@ var app = {
 
 function onResume() {
    setTimeout(function() {
-          // TODO: do your thing!
-          alert("on resume")
-        }, 0);
+     // TODO: do your thing!
+     window.location.href = "index.html";
+   }, 0);
 }

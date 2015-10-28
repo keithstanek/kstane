@@ -1,63 +1,33 @@
 
 
 function loadRestaurantMenu() {
+   var categoryList = getJsonFromSession(MENU_SESSION_KEY).categories;
 
-   $.ajax({
-      //url: "http://mobile-kstane.rhcloud.com/rest/menu/1",
-      url: MENU_URL,  // defined in constants.js
-      cache: false,
-      success: function(data) {
-         //alert(data);
-         var response = JSON.parse(data);
-         var categoryList = response.menu.categories;
-         var condiments = response.condiments;
+   for (var i = 0; i < categoryList.length; i++) {
+      var category = categoryList[i];
+      addCollapsableRow("category_" +category.id, category.name, "accordion");
 
-         for (var x = 0; x < condiments.length; x++) {
-            var c = condiments[x];
-            condimentDictionary[c.id] = c;
-         }
+      var itemList = category.items;
+      for (var itemCounter = 0; itemCounter < itemList.length; itemCounter++) {
+         var item = itemList[itemCounter];
+         // add a collapsable row before we append the item
+         //alert("id [" + item.id + "] name [" + item.name + "] category id [" + category.id + "] price [" + item.price + "]")
+         addItemToCategory("item_" +item.id, item.name, "category_" + category.id + "_accordion", item.price);
 
-         addJsonToSession(RESTAURANT_SESSION_KEY, response.restaurant);
-         addJsonToSession(CONDIMENT_LIST_SESSION_KEY, condimentDictionary);
-
-         for (var i = 0; i < categoryList.length; i++) {
-            var category = categoryList[i];
-            addCollapsableRow("category_" +category.id, category.name, "accordion");
-
-            var itemList = category.items;
-            for (var itemCounter = 0; itemCounter < itemList.length; itemCounter++) {
-               var item = itemList[itemCounter];
-               // add the item to the dictionary for use on the cart page
-               itemDictionary[item.id] = JSON.stringify(item);
-               // add a collapsable row before we append the item
-               //alert("id [" + item.id + "] name [" + item.name + "] category id [" + category.id + "] price [" + item.price + "]")
-               addItemToCategory("item_" +item.id, item.name, "category_" + category.id + "_accordion", item.price);
-
-               // now that we have the item added to the category, lets add the condiments and add to cart button
-               addCondimentsToMenuItem(item.condiments, item)
-            }
-         }
-
-         addJsonToSession(ITEM_LIST_SESSION_KEY, itemDictionary);
-         //$("#menuCategoriesSet").collapsibleset('refresh');
-      },
-      error: function(error) {
-         //console.log("error updating table -" + error.status);
-         //alert(JSON.stringify(error, null, 2))
-      },
-      complete: function() {
+         // now that we have the item added to the category, lets add the condiments and add to cart button
+         addCondimentsToMenuItem(item.condiments, item)
       }
-   });
+   }
 }
 
 function addCondimentsToMenuItem(condiments, item) {
    //alert("Condiment count [" + condiments.length + "] for [" + item.name + "]");
    var htmlStart = "<form id=\"form_item_" + item.id + "\" action=\"#\" onsubmit=\"return false;\"><input type=\"hidden\" id=\"id_for_item\" value=\"" + item.id  + "\"><div>";
    var htmlEnd = "<br><div style=\"text-align: center\"><p>" +
-      "<button type=\"button\" onclick=\"incrementCart('" + item.id + "'); return false;\" class=\"btn btn-sm btn-primary\"><i class=\"fa fa-plus\"></i></button>&nbsp;&nbsp;&nbsp;" +
+      "<button type=\"button\" onclick=\"incrementCart('" + item.id + "'); return false;\" class=\"btn btn-primary\"><i class=\"fa fa-plus\"></i></button>&nbsp;&nbsp;&nbsp;" +
       "<span class=\"quantity\" id=\"itemid_" + item.id + "_quantity\">1</span>&nbsp;&nbsp;&nbsp;" +
-      "<button type=\"button\" onclick=\"decrementCart('" + item.id + "'); return false;\" class=\"btn btn-sm btn-danger\"><i class=\"fa fa-minus\"></i></button>" +
-      "</p><p><button type=\"button\" class=\"btn btn-sm btn-success\" id=\"btnAdd\" onclick=\"addToCart('" + item.id + "'); return false;\" >" +
+      "<button type=\"button\" onclick=\"decrementCart('" + item.id + "'); return false;\" class=\"btn btn-danger\"><i class=\"fa fa-minus\"></i></button>" +
+      "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type=\"button\" class=\"btn btn-success\" id=\"btnAdd\" onclick=\"addToCart('" + item.id + "'); return false;\" >" +
       "<i class=\"fa fa-shopping-cart\"></i>&nbsp;&nbsp;&nbsp;Add to Cart</button></p></div></div></form>";
 
    var htmlMiddle = "<div class=\"checkbox-grid\">";
@@ -73,7 +43,8 @@ function addCondimentsToMenuItem(condiments, item) {
          if (checkboxType == "radio" && counter == 0) {
             itemChecked = "checked=\"checked\"";
          }
-         var condiment = condimentDictionary[itemCondimentId];
+
+         var condiment = getCondimentById(itemCondimentId);
          var name = condiment.name;
          if (condiment.isUpsell) {
             name += " ($" + formatNumber(condiment.price) + ")";
@@ -110,10 +81,12 @@ function addToCart(itemId) {
 
    // get all the checkbox values
    var itemPrice = 0;
+   var condimentList = getVarFromSession(CONDIMENT_LIST_SESSION_KEY);
    $.each( fields, function( i, field ) {
       if ( (field.type === "checkbox" || field.type === "radio") && field.checked ) {
          condimentsForCart[condimentsCounter++] = field.value;
-         itemPrice += condimentDictionary[field.value].price;
+         var condiment = getCondimentById(Number(field.value));
+         itemPrice += Number(condiment.price);
          if (field.type === "checkbox" ) {
             field.checked = false;
          }
