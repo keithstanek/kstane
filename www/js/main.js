@@ -29,23 +29,43 @@ jQuery(function($) {'use strict';
 
 	// portfolio filter
 	$(document).ready(function(){
-
-		if (loadMenu) {
-			loadRestaurantMenu();
+		// first check to make sure they are logged in, either as a person or guest
+		var userLoggedIn = loggedIn();
+		if (!userLoggedIn &&  page !== "login") {
+			window.location.href="login.html";
 		}
 
-		if (loadCart) {
+		if (userLoggedIn &&  page === "login") {
+			$("#btnLogin").hide();
+			$("#topDiv").hide();
+			$("#btnLogin-Register").hide();
+			$("#btnLogout").show();
+		}
+
+		if (!userLoggedIn &&  page === "login") {
+			$("#btnLogout").hide();
+		}
+
+
+
+		if (page === "menu") {
+			loadRestaurantMenu();
+			var storeIsOpen = isStoreOpen();
+			if (!storeIsOpen) {
+				alert("The store is closed!!!!!!!!!")
+			}
+		}
+
+		if (page === "view_cart") {
 			loadCartView();
 		}
 
 		loadCartText();
 
-		if (showCheckoutModal) {
-			//alert("document loaded [" + showCheckoutModal + "]");
+		if (page === "checkout") {
 			loadCheckoutModal();
 			loadCartSummary();
 		}
-
 
 		// $('.main-slider').addClass('animate-in');
 		// $('.preloader').remove();
@@ -74,6 +94,19 @@ jQuery(function($) {'use strict';
 		// 	});
 		// }
 	});
+
+	function loggedIn() {
+		var userInfo = JSON.parse(window.sessionStorage.getItem("user"));
+		if (userInfo === null) {
+			// they may be in the local storage, check there
+			var user = JSON.parse(window.localStorage.getItem("user"));
+			if (user !== null) {
+				return true;
+			}
+			return false;
+		}
+		return true;
+	}
 
 
 	$('.timer').each(count);
@@ -139,15 +172,17 @@ jQuery(function($) {'use strict';
 
 function loadCartText() {
 	var cart = window.sessionStorage.getItem("cart");
+	var cartTotal = 0;
 	if (cart !== "") {
 		cart = JSON.parse(cart);
 		var quantity = 0;
 		for (var i =0; i < cart.items.length; i++) {
 			if (cart.items[i] !== null) {
 				quantity = (+cart.items[i].quantity) + (+quantity);
+				cartTotal += cart.items[i].quantity * cart.items[i].price;
 			}
 		}
-		$("#cartTotal").text("Cart: $" + formatNumber(cart.total) + " (" + quantity + " Items)");
+		$("#cartTotal").text("$" + formatNumber(cartTotal) + " (" + quantity + " items)");
 	}
 }
 
@@ -190,6 +225,29 @@ function getCondimentById(id) {
 	}
 }
 
+function isStoreOpen() {
+	var restaurant = JSON.parse(window.sessionStorage.getItem("restaurant"));
+	var openTime = restaurant.timeOpen;
+	var closeTime = restaurant.timeClose;
+
+	var currentDate = new Date();
+
+	var startDate = new Date();
+	startDate.setHours(openTime.substring(0, openTime.indexOf(":")));
+	startDate.setMinutes(openTime.substring(openTime.indexOf(":") + 1));
+	startDate.setSeconds("00");
+
+	var endDate = new Date();
+	endDate.setHours(closeTime.substring(0, closeTime.indexOf(":")));
+	endDate.setMinutes(closeTime.substring(closeTime.indexOf(":") + 1));
+	endDate.setSeconds("00");
+
+	if (Date.parse(currentDate) > Date.parse(endDate) || Date.parse(currentDate) < Date.parse(startDate)) {
+		return false;
+	}
+	return true;
+}
+
 function getItemList() {
 	 return JSON.parse(window.sessionStorage.getItem("itemList"));
 }
@@ -205,4 +263,52 @@ function buildCondimentList(condiments) {
   } else {
 	  return "";
   }
+}
+
+function decrementCart(itemId) {
+   var quantity = $("#itemid_" + itemId + "_quantity").text();
+   if (quantity === "0") {
+     return false;
+   }
+   var span = $("#itemid_" + itemId + "_quantity");
+   var newQuantity = span.text() - 1;
+   span.text(newQuantity);
+}
+
+function incrementCart(itemId) {
+   var span = $("#itemid_" + itemId + "_quantity");
+   var newQuantity = 1 + +span.text();
+   span.text(newQuantity);
+}
+
+function getUserIdFromSession() {
+	var userInfo = JSON.parse(window.sessionStorage.getItem(USER_SESSION_KEY));
+	return userInfo.id;
+}
+
+function getRestaurantIdFromSession() {
+	var restaurantInfo = JSON.parse(window.sessionStorage.getItem(RESTAURANT_SESSION_KEY));
+	return restaurantInfo.id;
+}
+
+function getFranchiseIdFromSession() {
+	var restaurantInfo = JSON.parse(window.sessionStorage.getItem(RESTAURANT_SESSION_KEY));
+	return restaurantInfo.franchiseId;
+}
+
+
+function addVarToSession(id, item) {
+	window.sessionStorage.setItem(id, item);
+}
+
+function getVarFromSession(id) {
+	return window.sessionStorage.getItem(id);
+}
+
+function addJsonToSession(id, item) {
+	window.sessionStorage.setItem(id, JSON.stringify(item));
+}
+
+function getJsonFromSession(id) {
+	return JSON.parse(window.sessionStorage.getItem(id));
 }

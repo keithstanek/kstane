@@ -1,83 +1,87 @@
 
 
 function loadRestaurantMenu() {
+
    $.ajax({
       //url: "http://mobile-kstane.rhcloud.com/rest/menu/1",
-      url: "http://192.168.0.172:8080/mobile-1.0/rest/menu/1",
+      url: MENU_URL,  // defined in constants.js
       cache: false,
       success: function(data) {
-         var categoryList = data.fullMenu.categoryList;
-         var condiments = data.fullMenu.condimentList;
+         //alert(data);
+         var response = JSON.parse(data);
+         var categoryList = response.menu.categories;
+         var condiments = response.condiments;
 
          for (var x = 0; x < condiments.length; x++) {
             var c = condiments[x];
             condimentDictionary[c.id] = c;
          }
 
-         window.sessionStorage.setItem("condimentList", JSON.stringify(condimentDictionary));
+         addJsonToSession(RESTAURANT_SESSION_KEY, response.restaurant);
+         addJsonToSession(CONDIMENT_LIST_SESSION_KEY, condimentDictionary);
 
          for (var i = 0; i < categoryList.length; i++) {
             var category = categoryList[i];
             addCollapsableRow("category_" +category.id, category.name, "accordion");
 
-            var itemList = category.itemList;
+            var itemList = category.items;
             for (var itemCounter = 0; itemCounter < itemList.length; itemCounter++) {
                var item = itemList[itemCounter];
                // add the item to the dictionary for use on the cart page
                itemDictionary[item.id] = JSON.stringify(item);
                // add a collapsable row before we append the item
-               addItemToCategory("item_" +item.id, item.name, "category_" + category.id + "_accordion", itemList[itemCounter].price);
+               //alert("id [" + item.id + "] name [" + item.name + "] category id [" + category.id + "] price [" + item.price + "]")
+               addItemToCategory("item_" +item.id, item.name, "category_" + category.id + "_accordion", item.price);
 
                // now that we have the item added to the category, lets add the condiments and add to cart button
                addCondimentsToMenuItem(item.condiments, item)
             }
          }
 
-         window.sessionStorage.setItem("itemList", JSON.stringify(itemDictionary));
+         addJsonToSession(ITEM_LIST_SESSION_KEY, itemDictionary);
          //$("#menuCategoriesSet").collapsibleset('refresh');
       },
       error: function(error) {
          //console.log("error updating table -" + error.status);
-         alert(JSON.stringify(error, null, 2))
+         //alert(JSON.stringify(error, null, 2))
       },
       complete: function() {
-         // Hide the loader widget
-         $.mobile.loading("hide");
       }
    });
 }
 
 function addCondimentsToMenuItem(condiments, item) {
    //alert("Condiment count [" + condiments.length + "] for [" + item.name + "]");
-   var htmlStart = "<form name=\"form_item_" + item.id + "\" action=\"#\" onsubmit=\"return false;\"><input type=\"hidden\" id=\"id_for_item\" value=\"" + item.id  + "\">";
-   var htmlEnd = "<div>" +
-      "<input name=\"itemid_" + item.id + "_quantity\" id=\"itemid_" + item.id + "_quantity\" value=\"1\" placeholder=\"Quantity\" min=\"0\" " +
-       "required=\"true\" type=\"text\" size=\"4\" />&nbsp;" +
-       "<input type=\"button\" class=\"btn btn-small btn-success\" value=\"Add to Cart\" id=\"btnAdd\" onclick=\"addToCart($(this).parent().parent()); return false;\" /></div></form>";
+   var htmlStart = "<form id=\"form_item_" + item.id + "\" action=\"#\" onsubmit=\"return false;\"><input type=\"hidden\" id=\"id_for_item\" value=\"" + item.id  + "\"><div>";
+   var htmlEnd = "<br><div style=\"text-align: center\"><p>" +
+      "<button type=\"button\" onclick=\"incrementCart('" + item.id + "'); return false;\" class=\"btn btn-sm btn-primary\"><i class=\"fa fa-plus\"></i></button>&nbsp;&nbsp;&nbsp;" +
+      "<span class=\"quantity\" id=\"itemid_" + item.id + "_quantity\">1</span>&nbsp;&nbsp;&nbsp;" +
+      "<button type=\"button\" onclick=\"decrementCart('" + item.id + "'); return false;\" class=\"btn btn-sm btn-danger\"><i class=\"fa fa-minus\"></i></button>" +
+      "</p><p><button type=\"button\" class=\"btn btn-sm btn-success\" id=\"btnAdd\" onclick=\"addToCart('" + item.id + "'); return false;\" >" +
+      "<i class=\"fa fa-shopping-cart\"></i>&nbsp;&nbsp;&nbsp;Add to Cart</button></p></div></div></form>";
 
-   var htmlMiddle = "<ul class=\"checkbox-grid\">";
+   var htmlMiddle = "<div class=\"checkbox-grid\">";
    var upSellList = "";
    var checkboxType = "checkbox", itemChecked = "";
-   if (item.allowOneCondiment == true) {
+   if (item.oneCondimentOnly == true) {
       checkboxType = "radio";
    }
 
     if (condiments.length !== 0) {
        for (var counter = 0; counter < condiments.length; counter++) {
-         var condiment = condiments[counter];
+         var itemCondimentId = condiments[counter];
          if (checkboxType == "radio" && counter == 0) {
             itemChecked = "checked=\"checked\"";
          }
-
-         var name = condimentDictionary[condiment].name;
-         if (condimentDictionary[condiment].upSell) {
-            name += " ($" + formatNumber(condimentDictionary[condiment].price) + ")";
+         var condiment = condimentDictionary[itemCondimentId];
+         var name = condiment.name;
+         if (condiment.isUpsell) {
+            name += " ($" + formatNumber(condiment.price) + ")";
          }
-         var html = "<li><input name=\"condiment_item_" + item.id + "\" id=\"chkbxCondimentId_" + condiment + "\" " +
-                "value=\"" + condiment + "\" type=\"" + checkboxType + "\" " + itemChecked + " /> " +
-                "<label for=\"chkbxCondimentId_" + condiment + "\">" + name + "</label></li>";
+         var html = "<label class=\"btn btn-xs btn-default\"><input name=\"condiment_item_" + item.id + "\" id=\"chkbxCondimentId_" + condiment.id + "\" " +
+                "value=\"" + condiment.id + "\" type=\"" + checkboxType + "\" " + itemChecked + " /> " + name + "</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 
-         if (condimentDictionary[condiment].upSell == true) {
+         if (condiment.isUpsell == true) {
             upSellList += html;
          } else {
             htmlMiddle += html;
@@ -85,27 +89,24 @@ function addCondimentsToMenuItem(condiments, item) {
 
          itemChecked = "";
        }
-       htmlMiddle += upSellList + "</ul><br>";
+       htmlMiddle += upSellList + "</div>";
    } else {
       htmlMiddle = "";
    }
+   //alert(htmlStart + htmlMiddle + htmlEnd)
    $("#item_" + item.id + "_condiments").append(htmlStart + htmlMiddle + htmlEnd).trigger('create');
 }
 
-function addToCart(itemForm) {
+function addToCart(itemId) {
    var err = "";
    var condimentsForCart = [];
    var condimentsCounter = 0;
-   var fields = $(itemForm).find(':input');
+   var fields = $("#form_item_" + itemId).find(':input');
 
-   var quantity = getValueFromFormFields(fields, "quantity", true, 1);
+   var quantity = $("#itemid_" + itemId + "_quantity").text();
    if ( isNaN(quantity) || quantity <= 0 ) {
-      $("#modal-message").text("Invalid Cart Amount [" + quantity + "]. Please adjust the amount to continue");
-      $("#myModal").modal('show');
       return false;
    }
-
-   var itemId = getValueFromFormFields(fields, "id_for_item", false, null);
 
    // get all the checkbox values
    var itemPrice = 0;
@@ -113,7 +114,9 @@ function addToCart(itemForm) {
       if ( (field.type === "checkbox" || field.type === "radio") && field.checked ) {
          condimentsForCart[condimentsCounter++] = field.value;
          itemPrice += condimentDictionary[field.value].price;
-         field.checked = false;
+         if (field.type === "checkbox" ) {
+            field.checked = false;
+         }
       }
    });
 
@@ -123,20 +126,24 @@ function addToCart(itemForm) {
       updateCart(itemFound, quantity);
       $("#modal-message").text("Item exists in the cart already. The quantity has been updated.");
       $("#myModal").modal('show');
+      setTimeout(function(){ $("#myModal").modal('hide'); }, 2500);
+      $("#itemid_" + itemId + "_quantity").text("0");
       return false;
    }
-   var totalPrice = (itemPrice + getItemById(itemId).price) * quantity;
+   var itemTotalPrice = itemPrice + getItemById(itemId).price;
+   var totalPrice = itemTotalPrice * quantity;
    var cartCounter = getNextCartItemCount();
-   var item = { id: itemId, quantity: quantity, condiments: condimentsForCart, cartIdentifierId: cartCounter, price: totalPrice};
+   var item = { id: itemId, quantity: quantity, condiments: condimentsForCart, cartIdentifierId: cartCounter, price: itemTotalPrice};
 
-   var cart = JSON.parse(window.sessionStorage.getItem("cart"));
+   var cart = getJsonFromSession(CART_SESSION_KEY);
    if (cart === null) {
       cart = {total: 0, items: []};
    }
    cart.items[cartCounter] =  item;
    cart.total = cart.total + totalPrice;
-   window.sessionStorage.setItem("cart", JSON.stringify(cart));
+   addJsonToSession(CART_SESSION_KEY, cart);
    loadCartText();
+   $("#itemid_" + itemId + "_quantity").text("1");
 
    $("#modal-message").text("The item has been added to the cart.");
    $("#myModal").modal('show');
@@ -144,7 +151,7 @@ function addToCart(itemForm) {
 }
 
 function updateCart(cartIdentifierId, quantity) {
-   var cart = JSON.parse(window.sessionStorage.getItem("cart"));
+   var cart = getJsonFromSession(CART_SESSION_KEY);
 	var itemList = getItemList();
    for (var i =0; i < cart.items.length; i++) {
 		if (cart.items[i] === null) {
@@ -156,7 +163,7 @@ function updateCart(cartIdentifierId, quantity) {
          cart.total = cart.total + (quantity * cart.items[i].price);
 
 			// TODO - update cart total based on quantity
-			window.sessionStorage.setItem("cart", JSON.stringify(cart));
+			addJsonToSession(CART_SESSION_KEY, cart);
          loadCartText();
          return;
 		}
@@ -164,7 +171,7 @@ function updateCart(cartIdentifierId, quantity) {
 }
 
 function itemExists(itemId, itemCondiments) {
-   var cart = JSON.parse(window.sessionStorage.getItem("cart"));
+   var cart = getJsonFromSession(CART_SESSION_KEY);
    if (cart === null) {
       return -1;
    }
@@ -221,7 +228,7 @@ function addItemToCategory(id, name, appendTo, price) {
        "<div id=\"item_panel_" + id + "\" class=\"panel-collapse collapse\" style=\"background-color: #" + itemPanelBgColor + "\">" +
       "     <div class=\"panel-body\"><div  id=\"" + id + "_condiments\"></div>" +
       " </div></div>";
-       //alert(div);
+      // alert(div);
    $("#" + appendTo).append(div).trigger('create');
 }
 

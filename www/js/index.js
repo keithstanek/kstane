@@ -27,6 +27,7 @@ var app = {
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
+        document.addEventListener("resume", onResume, false);
     },
     // deviceready Event Handler
     //
@@ -47,3 +48,10 @@ var app = {
         console.log('Received Event: ' + id);
     }
 };
+
+function onResume() {
+   setTimeout(function() {
+          // TODO: do your thing!
+          alert("on resume")
+        }, 0);
+}
