@@ -71,19 +71,7 @@
     <script type="text/javascript" src="js/constants.js"></script>
     <script src="js/menu.js"> </script>
     <style>
-    .item-cell {
-      display: table-cell;
-    }
-    .category-header {
-      #border-bottom: 1px rgba(0, 0, 0, 0.25) solid;
-      font-weight: bold; color: #337AB7;
-    }
-    .category-underline {
-      border-bottom: 1px rgba(0, 0, 0, 0.25) solid;
-    }
-    .summary-cell {
-      border-bottom: 1px rgba(0, 0, 0, 0.25) solid;
-    }
+
     </style>
     <section id="services">
       <div class="container" style="margin-top: -70px;">
@@ -97,7 +85,7 @@
                  <p>
                     <!-- <input type="checkbox" id="chkConfirm" checked="false" value="1"> -->
                     Please review your order for accuracy. Click the buttons below to modify your order.<br>
-                    <a href="view_cart.html" class="btn btn-xs btn-success">Modify Cart</a> or <a href="menu.html" class="btn btn-xs btn-success">Add More Items</a>
+                    <a href="view_cart.html" class="btn btn-success">Modify Cart</a>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;<a href="menu.html" class="btn btn-success">Add More Items</a>
                  </p>
              </div>
              <!-- <div class="col-sm-12" style="box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);"> -->
@@ -106,7 +94,17 @@
                     <div class="category-underline">
                      <h3><span class="category-header">Payment Info</span></h3></div>
                      <p>
-                        <b>Amount Due: $<span id="summary-total"></span></b>
+                        <p>
+                           <div style="display: table-cell; width: 50%; text-align: right">
+                              Sub-Total: $<span id="summary-sub-total">0.00</span><br>
+                              Tax Due: $<span id="summary-tax">0.00</span><br>
+                              <b>Amount Due: $<span id="summary-total">0.00</span></b>
+                           </div>
+                           <div style="display: table-cell; width: 50%; text-align: right">
+                              Discount: $<span id="summary-discount">0.00</span><br>
+                              Delivery: $<span id="summary-delivery-fee">0.00</span>
+                           </div>
+                        </p>
                         <form>
                         <div>
                            <div class="item-cell"><input type="radio" name="paymentType" onclick="toggleCCDiv();" checked id="rdoPayAtStore" value="pay-at-store">&nbsp;&nbsp;</div>
@@ -119,7 +117,7 @@
                         <div id="ccpaymentinfo" style="display: none; margin-left: 19px;">
                            <div class="form-group">
                               Card Number:<br>
-                              <input type="text" id="delivary-name" placeholder="1234123412341234" size="40">
+                              <input type="text" id="credit-card-number" onkeyup="replaceText($(this));" onblur="replaceText($(this));" placeholder="1234123412341234" size="40"  maxlength="16" value="">
                            </div>
                            <div class="form-group">
                               Expiration Date:<br>
@@ -149,11 +147,11 @@
                            </div>
                            <div class="form-group">
                               Security Code:<br>
-                              <input type="text" id="ccSecurityCode" placeholder="123" size="10">
+                              <input type="text" id="ccSecurityCode" onkeyup="replaceText($(this));" onblur="replaceText($(this));" placeholder="123" size="10" maxlength="5" value="">
                            </div>
                            <div class="form-group">
                               Zip Code:<br>
-                              <input type="text" id="ccZipCode" placeholder="123" size="10">
+                              <input type="text" id="ccZipCode" onkeyup="replaceText($(this));" onblur="replaceText($(this));" placeholder="123" size="10" maxlength="5" value="">
                            </div>
                         </div>
                         </form>
@@ -167,28 +165,37 @@
                         <br>
                         <div class="form-group" style="font-weight: bold;">
                            Order Type: &nbsp;<span id="txtOrderType"></span><br>
-                           <input type="button" onclick="loadCheckoutModal(); return false;" value="Change Order Type" class="btn btn-xs btn-success" />
+                           <input type="button" onclick="loadCheckoutModal(); return false;" value="Change Order Type" class="btn btn-success" />
                         </div>
                         <div class="form-group">
-                           <input type="text" id="name" placeholder="Name for Pick-up" size="40">
+                           <input type="text" id="name" placeholder="Name for Pick-up" size="40" value="">
                         </div>
-                        <div class="form-group" id="div-delivary-address"  style="display: none;">
-                           <input type="text" id="delivary-address" placeholder="Delivary Address - Russelville Only" size="40">
-                        </div>
-                        <div class="form-group">
-                           <input type="text" id="email" placeholder="Email" size="40">
+                        <div class="form-group" id="div-delivery-address"  style="display: none;">
+                           <input type="text" id="delivery-address" placeholder="Delivery Address - Russelville Only" size="40" value="">
                         </div>
                         <div class="form-group">
-                           <input type="text" id="phone" placeholder="Phone Number" size="40">
+                           <input type="text" id="email" placeholder="Email" size="40" value="">
+                        </div>
+                        <div class="form-group">
+                           <input type="text" id="phone" onkeyup="replaceText($(this));" onblur="replaceText($(this));" placeholder="Phone Number" size="40" value="">
                         </div>
                      </form>
                  </div>
              </div>
+             <div class="col-sm-12" id="saveOrder">
+                <p>
+                   Will this be a common order? Save time ordering your common orders by giving this order a name.<br>
+                   <input type="input" placeholder="Order Name" maxlength="25" id="txtSaveOrder"><br>
+                   <span style="color: red">
+                      ** Note: If you already have an order with name, the previous order will be replaced with this order.
+                   </span>
+                </p>
+             </div>
              <div class="col-sm-12">
                  <div class="text-center">
-                     <p>
-                        <input type="button" id="btnOrder" onclick="submitOrder();" class="btn btn-lg btn-primary" value="Place Order">
-                        <a href="index.html" class="btn btn-lg btn-danger">Cancel</a>
+                     <p class="checkbox-grid">
+                        <a href="" onclick="submitOrder();return false;" class="promo-code-btn btn btn-lg btn-primary"><i class="fa fa-lock"></i>&nbsp;Place Secure Order</a>
+                        <a href="home.html" class="promo-code-btn btn-lg btn-danger">Cancel</a>
                      </p>
                  </div>
              </div>
@@ -204,13 +211,13 @@
                            <h3><span style="font-weight: bold;">Do you want to:</span></h3>
                            <input type="button" value="Dine In" class="btn btn-primary" onclick="stepTwo('Dine In')">
                            <input type="button" value="Pick Up" class="btn btn-primary" onclick="stepTwo('Pick Up')">
-                           <input type="button" value="Delivary" class="btn btn-primary" onclick="stepTwo('Delivary')"><br>
+                           <input type="button" value="Delivery" class="btn btn-primary" onclick="stepTwo('Delivery')"><br>
                         </div>
                         <p></p>
                         <p>
                            <span style="color: red; font-weight: bold;">
-                              ** There is a 15% charge for delivary<br>
-                              ** Delivary service is only available in Russellville city limits.
+                              ** There is a 15% charge for delivery<br>
+                              ** Delivery service is only available in Russellville city limits.
                            </span>
                         </p>
                       </p>
@@ -219,6 +226,22 @@
                   </div>
                 </div>
               </div>
+              <div id="checkoutModal" class="modal fade">
+                 <div class="modal-dialog">
+                   <div class="modal-content">
+                     <div class="modal-header">
+                       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                       <h4 class="modal-title">Checkout</h4>
+                     </div>
+                     <div class="modal-body">
+                       <p id="modal-message"></p>
+                     </div>
+                     <div class="modal-footer">
+                       <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                     </div>
+                   </div><!-- /.modal-content -->
+                 </div><!-- /.modal-dialog -->
+               </div><!-- /.modal -->
          </div>
       </div>
     </section>
@@ -237,14 +260,134 @@
       }
    }
 
-   function submitOrder() {
-      alert("submitting order")
+   function displayModal(text) {
+      $("#modal-message").text(text);
+      $("#checkoutModal").modal('show');
    }
 
-   var orderType = "";
+   function checkValue(field, fieldName) {
+      if (field == null || field == "") {
+         errorFields[errorFieldsCounter++] = fieldName;
+      }
+   }
+
+   var errorFields = [];
+   var errorFieldsCounter = 0;
+
+   function replaceText(e) {
+     e.val(e.val().replace(/[^0-9]/g, ""));
+   }
+
+   function fillInForm() {
+      var user = getJsonFromSession(USER_SESSION_KEY);
+      $("#email").val(user.email);
+      $("#name").val(user.firstName + " " + user.lastName);
+      $("#phone").val(user.phone);
+   }
+
+   function submitOrder() {
+      var storeIsOpen = isStoreOpen();
+      // if (!storeIsOpen) {
+      //    displayModal("The restuarant is closed. It will open at " + getJsonFromSession(RESTAURANT_SESSION_KEY).timeOpen + " AM. You can re-sumbit your order then.")
+      //    return;
+      // }
+
+      // reset the counter and array
+      errorFieldsCounter = 0;
+      errorFields = []
+
+      var email = $("#email").val();
+      var name = $("#name").val();
+      var phone = $("#phone").val();
+      var deliveryAddress = $("#delivery-address").val();
+      var ccNumber = $("#credit-card-number").val();
+      var ccExpireMonth = $("#ccExpireMonth").val();
+      var ccExpireYear = $("#ccExpireYear").val();
+      var ccSecurityCode = $("#ccSecurityCode").val();
+      var ccZipCode = $("#ccZipCode").val();
+
+      checkValue(name, "Name");
+      checkValue(email, "Email Address");
+      checkValue(phone, "Phone Number");
+
+      if ($("#txtOrderType").text() === "Delivery") {
+         checkValue(deliveryAddress, "Delivery Address");
+      }
+
+      if ( $("#rdoCCPayment").is(':checked') ) {
+         checkValue(ccNumber, "Credit Card Number");
+         checkValue(ccExpireMonth, "Credit Card Expiration Month");
+         checkValue(ccExpireYear, "Credit Card Expiration Year");
+         checkValue(ccSecurityCode, "Credit Card Security Code");
+         checkValue(ccZipCode, "Credit Card Zip Code");
+      }
+
+      if (errorFields.length > 0) {
+         // build string to display in the modal
+         var displayString = "<span style=\"color: red\">The following fields need to be filled out<ul>";
+         for (var i = 0; i < errorFields.length; i++) {
+            displayString += "<li>" + errorFields[i] + "</li>";
+         }
+         displayString += "</ul></span>";
+         $("#modal-message").html(displayString);
+         $("#checkoutModal").modal('show');
+
+         return;
+      }
+      var paymentType = $('input:radio[name=paymentType]:checked').val();
+      var request = {
+          "email": email,
+          "phone": phone,
+          "name": name,
+          "deliveryAddress": deliveryAddress,
+          "ccSecurityCode": ccSecurityCode,
+          "ccExpireMonth": ccExpireMonth,
+          "ccExpireYear": ccExpireYear,
+          "ccZipCode": ccZipCode,
+          "ccNumber": ccNumber,
+          "restaurantId": getRestaurantIdFromSession(),
+          "deliveryAmount": $("#summary-delivery-fee").text(),
+          "discountType": getVarFromSession(PROMO_DISCOUNT_TYPE_SESSION_KEY),
+          "discountTotal": $("#summary-discount").text(),
+          "userId": getUserIdFromSession(),
+          "paymentType": paymentType,
+          "orderStatus": "ORDER_SUBMITTED",
+          "promoCode": getVarFromSession(PROMO_DISCOUNT_NAME_SESSION_KEY),
+          "orderType": $("#txtOrderType").text(),
+          "total": $("#summary-total").text(),
+          "taxTotal": $("#summary-tax").text(),
+          "subTotal": $("#summary-sub-total").text()
+      }
+
+      $.ajax({
+          type: 'POST',
+          contentType: 'application/json',
+          url: SUBMIT_ORDER_URL,
+          dataType: "json",
+          data: JSON.stringify(request),
+          success: function(data, textStatus, jqXHR){
+             var r = JSON.parse(data);
+             addVarToSession(ORDER_CONFIRMATION_NO_SESSION_KEY, r.response.orderId);
+             addVarToSession(ORDER_CONFIRMATION_NAME_SESSION_KEY, name);
+
+             // save the order to history if they wanted
+             var saveOrder = $("#txtSaveOrder").val().trim();
+             if (saveOrder !== "") {
+                addCartToOrderHistory(saveOrder);
+             }
+
+             window.location.href="order_confirmation.html";
+          },
+          error: function(jqXHR, textStatus, errorThrown){
+             alert('error: ' + textStatus +' ' + errorThrown + ' ' + JSON.stringify(jqXHR));
+          }
+      });
+
+      return;
+   }
 
    function loadCheckoutModal() {
-      $("#div-delivary-address").hide();
+      $("#div-delivery-address").hide();
       $("#modal-1").modal({
          visibility: 'show',
          backdrop: 'static',
@@ -255,29 +398,71 @@
    function stepTwo(val) {
       $("#modal-1").modal('hide');
       orderType = val;
-      if (orderType === "Delivary") {
-         $("#div-delivary-address").toggle();
+      if (orderType === "Delivery") {
+         $("#div-delivery-address").toggle();
       }
       $("#txtOrderType").text(orderType);
+      calculateCheckoutTotals();
    }
 
    function loadCartSummary() {
       var cart = JSON.parse(window.sessionStorage.getItem("cart"));
    	var itemList = getItemList();
-      var total = 0;
       for (var i =0; i < cart.items.length; i++) {
    		if (cart.items[i] === null) {
-   			//alert("cart item null for item [" + i + "]")
    			continue;
    		}
    		var item =  JSON.parse(itemList[cart.items[i].id]);
-         total += (cart.items[i].quantity * cart.items[i].price);
 
          var div = "<div><div class=\"item-cell\">[" + cart.items[i].quantity + "]&nbsp;&nbsp;</div>" +
-               "<div class=\"item-cell\">" + item.name + buildCondimentList(cart.items[i].condiments) + "</div></div>";
+               "<div class=\"item-cell\">" + item.name + buildCondimentList(cart.items[i]) + "</div></div>";
      		$("#order-summary").append(div).trigger("create");
    	}
+      calculateCheckoutTotals();
+   }
+
+   function calculateCheckoutTotals() {
+      var cart = JSON.parse(window.sessionStorage.getItem("cart"));
+   	var itemList = getItemList();
+      var subTotal = 0;
+      for (var i =0; i < cart.items.length; i++) {
+   		if (cart.items[i] === null) {
+   			continue;
+   		}
+   		var item =  JSON.parse(itemList[cart.items[i].id]);
+         subTotal += (cart.items[i].quantity * cart.items[i].price);
+   	}
+
+      var promoDiscount = getVarFromSession(PROMO_DISCOUNT_SESSION_KEY);
+      var discountText = "";
+      if (promoDiscount !== null && promoDiscount !== "") {
+         $("#summary-discount").text(formatNumber(Number(promoDiscount)));
+      } else {
+         $("#summary-discount").text("0.00");
+      }
+
+      var orderType = $("#txtOrderType").text();
+      var deliveryFee = 3;
+      if (orderType == "Delivery") {
+         var restaurant1 = getJsonFromSession(RESTAURANT_SESSION_KEY);
+         restaurant1.deliveryFee = 3;
+         addJsonToSession(RESTAURANT_SESSION_KEY, restaurant1);
+         var restaurant = getJsonFromSession(RESTAURANT_SESSION_KEY);
+         if (restaurant.deliveryFee !== null && restaurant.deliveryFee !== "" && restaurant.deliveryFee !== undefined){
+            deliveryFee = Number(restaurant.deliveryFee);
+         }
+         $("#summary-delivery-fee").text(formatNumber(deliveryFee));
+      } else {
+         deliveryFee = 0;
+         $("#summary-delivery-fee").text("0.00");
+      }
+
+      var tax = Number(getJsonFromSession(RESTAURANT_SESSION_KEY).taxRate) * (Number(subTotal) - Number(promoDiscount));
+
+      $("#summary-tax").text(formatNumber(tax));
+      var total = (subTotal - Number(promoDiscount)) + deliveryFee + tax;
       $("#summary-total").text(formatNumber(total));
+      $("#summary-sub-total").text(formatNumber(subTotal));
    }
 
     </script>

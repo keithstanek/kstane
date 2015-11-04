@@ -2800,6 +2800,14 @@ span.stButton_gradient,
    text-align: center; width: 20%;
    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
 }
+.previous-order-top-left {
+   display: table-cell;
+}
+.previous-order-top-right {
+   display: table-cell;
+   vertical-align: middle;
+   text-align: center; width: 20%;
+}
 .view-cart-item-table-cell-bottom-left {
    display: table-cell; vertical-align: middle; text-align: center;
 }
@@ -2820,4 +2828,58 @@ span.stButton_gradient,
 .view-cart-total {
    text-align: right;
    font-weight: bold;
+}
+.checkbox-grid {
+   -webkit-column-count: 2;
+   -moz-column-count: 2;
+   column-count: 2;
+}
+.checkbox-btn {
+   text-align: left;
+   display: block;
+   margin-bottom: 4px;
+}
+.promo-code-btn {
+   text-align: center;
+   display: block;
+   margin-bottom: 4px;
+}
+
+.my-panel {
+  padding: 5px;
+  background-color: #F3F3F3
+}
+
+.btn.nohover:hover {
+    /* here copy default .btn class styles */
+    cursor:default !important;
+    /* or something like that */
+}
+
+.groupItemsCondiments {
+   display: none;
+   margin-top: 15px;
+}
+
+.groupItemsCondimentsHeader {
+   font-weight: bold;
+   width: 100%;
+}
+
+.item-cell {
+  display: table-cell;
+}
+.category-header {
+  #border-bottom: 1px rgba(0, 0, 0, 0.25) solid;
+  font-weight: bold; color: #337AB7;
+}
+.category-underline {
+  border-bottom: 1px rgba(0, 0, 0, 0.25) solid;
+}
+.summary-cell {
+  border-bottom: 1px rgba(0, 0, 0, 0.25) solid;
+}
+
+.my-block {
+   display: inline-block;
 }

@@ -14,7 +14,12 @@ function loadCartView() {
 		var item =  JSON.parse(itemList[cart.items[i].id]);
 		var quantity = cart.items[i].quantity;
       var total = quantity * cart.items[i].price;
-      var condimentsString = buildCondimentList(cart.items[i].condiments).substring(3);
+
+      var substringLength = 3;
+      if (cart.items[i].isCombo) {
+         substringLength = 5;
+      }
+      var condimentsString = buildCondimentList(cart.items[i]).substring(substringLength);
 
       var cartIdentifierId = cart.items[i].cartIdentifierId;
 
@@ -115,13 +120,6 @@ function showDeleteModal(itemId) {
    $("#myModal").modal('show');
 }
 
-function removePromoCode() {
-   addVarToSession(PROMO_DISCOUNT_SESSION_KEY, 0);
-   window.sessionStorage.removeItem(PROMO_CODE_SESSION_KEY);
-   window.sessionStorage.removeItem(PROMO_DISCOUNT_NAME_SESSION_KEY);
-   calculateCartTotals();
-}
-
 function removeItemFromCart() {
    $("#myModal").modal('hide');
    var cartIdentifierId = $("#modalItemId").val();
@@ -157,7 +155,7 @@ function addPromoCode() {
    }
    $.ajax({
       //url: "http://mobile-kstane.rhcloud.com/rest/menu/1",
-      url: PROMO_URL + "/" + encodeURIComponent(promoCode),  // defined in constants.js
+      url: PROMO_URL + promoCode,  // defined in constants.js
       cache: false,
       success: function(data) {
          var response = JSON.parse(data).response;

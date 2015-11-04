@@ -100,16 +100,6 @@
                  <div style="display: table; width: 100%;">
                     <div style="display: table-row;">
                        <div style="display: table-cell; width: 50%;">
-                          <div style="font-weight: bold;">
-                            Promo/Coupon Code<br>
-                            <input type="text" id="txtPromo" value="" size="15">&nbsp;&nbsp;&nbsp;
-                            <input type="button" id="btnAddPromo" name="btnAddPromo" class="btn btn-primary"
-                            value="Add Code" onclick="addPromoCode(); return false;">&nbsp;&nbsp;
-                            <input type="button" id="btnRemovePromo" name="btnRemovePromo" class="btn btn-primary"
-                            value="Remove Code" onclick="removePromoCode(); return false;">
-                         </div>
-                       </div>
-                       <div style="display: table-cell; width: 50%;">
                             <div class="view-cart-spacer">&nbsp;</div>
                             <div class="view-cart-total">Sub-Total:&nbsp;&nbsp;$<span id="cart-subTotal">0.00</span></div>
                             <div class="view-cart-spacer">&nbsp;</div>
@@ -119,7 +109,11 @@
                             <div class="view-cart-spacer">&nbsp;</div>
                             <div class="view-cart-total">Total:&nbsp;&nbsp;$<span id="cart-total">0.00</span></div>
                             <br>
-                            <div class="view-cart-total"><a href="checkout.html" class="btn btn btn-success">Checkout</a></div>
+                            <div class="checkbox-grid">
+                               <a href="" class="promo-code-btn btn btn-primary" onclick='$("#addPromoCodeModal").modal("show"); return false;'>Add Promo Code</a>
+                               <a href="" class="promo-code-btn btn btn-primary" onclick="removePromoCode(); return false;">Remove Promo Code</a>
+                            </div>
+                            <div class="view-cart-total"><a href="checkout.html" style="display: block" class="btn btn btn-success">Checkout</a></div>
                             <div class="view-cart-spacer">&nbsp;</div>
                        </div>
                     </div>
@@ -162,6 +156,24 @@
               </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
           </div><!-- /.modal -->
+          <div id="addPromoCodeModal" class="modal fade">
+             <div class="modal-dialog">
+               <div class="modal-content">
+                 <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title">Update Cart</h4>
+                 </div>
+                 <div class="modal-body">
+                   <p>Promotional Code/Coupon:</p>
+                   <input type="text" id="txtPromo" value=""><br>
+                 </div>
+                 <div class="modal-footer">
+                   <button type="button" class="btn btn-primary" onclick="addPromoCode();" data-dismiss="modal">Add</button>
+                   <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                 </div>
+               </div><!-- /.modal-content -->
+             </div><!-- /.modal-dialog -->
+           </div><!-- /.modal -->
          <div id="errorModal" class="modal fade">
             <div class="modal-dialog">
               <div class="modal-content">

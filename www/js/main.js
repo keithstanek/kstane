@@ -54,7 +54,9 @@ jQuery(function($) {'use strict';
 			$("#btnLogout").hide();
 		}
 
-
+		if (page === "previous_order") {
+			loadPreviousOrders();
+		}
 
 		if (page === "menu") {
 			loadRestaurantMenu();
@@ -68,11 +70,20 @@ jQuery(function($) {'use strict';
 			loadCartView();
 		}
 
+		if (page === "order_confirmation") {
+			loadOrderConfirmText();
+			window.sessionStorage.setItem(CART_SESSION_KEY, null);
+			removePromoCode();
+		}
+
 		loadCartText();
 
 		if (page === "checkout") {
 			loadCheckoutModal();
 			loadCartSummary();
+			if (getUserIdFromSession !== "GUEST") {
+				fillInForm();
+			}
 		}
 
 		// $('.main-slider').addClass('animate-in');
@@ -179,7 +190,7 @@ jQuery(function($) {'use strict';
 });
 
 function loadCartText() {
-	var cart = window.sessionStorage.getItem("cart");
+	var cart = window.sessionStorage.getItem(CART_SESSION_KEY);
 	var cartTotal = 0;
 	if (cart !== "") {
 		cart = JSON.parse(cart);
@@ -259,21 +270,80 @@ function isStoreOpen() {
 	return true;
 }
 
-function getItemList() {
-	 return JSON.parse(window.sessionStorage.getItem("itemList"));
+function removePromoCode() {
+   addVarToSession(PROMO_DISCOUNT_SESSION_KEY, 0);
+   window.sessionStorage.removeItem(PROMO_CODE_SESSION_KEY);
+   window.sessionStorage.removeItem(PROMO_DISCOUNT_NAME_SESSION_KEY);
+   calculateCartTotals();
 }
 
-function buildCondimentList(condiments) {
-	if (condiments.length !== 0) {
-		var condimentDictionary = JSON.parse(window.sessionStorage.getItem("condimentList"));
-		var returnString = " - ";
-		for (var counter = 0; counter < condiments.length; counter++) {
-		  returnString = returnString + condimentDictionary[condiments[counter]].name + ", ";
+function getItemList() {
+	 return JSON.parse(window.sessionStorage.getItem(ITEM_LIST_SESSION_KEY));
+}
+
+function buildCondimentList(item) {
+	var condimentDictionary = JSON.parse(window.sessionStorage.getItem(CONDIMENT_LIST_SESSION_KEY));
+	var returnString = " - ";
+	if (item.isCombo === true) {
+		var groups = item.itemGroups;
+		returnString = ":<br>";
+		for (var i = 0; i < item.itemGroups.length; i++) {
+			var group = item.itemGroups[i];
+			var itemId = group.id;
+			var currentItem = getItemById(itemId);
+			returnString += currentItem.name;
+			if (group.condiments.length > 0) {
+				returnString += " - ";
+				for (var counter = 0; counter < group.condiments.length; counter++) {
+				  returnString = returnString + condimentDictionary[group.condiments[counter]].name + ", ";
+			   }
+				returnString = returnString.substring(0, returnString.length - 2); // trim the extra ,
+			}
+			returnString += "<br>";
 		}
-		return returnString.substring(0, returnString.length - 2);
-  } else {
-	  return "";
+		return returnString.substring(0, returnString.length - 4); // trim the extra <br>
+	} else{
+		if  (item.condiments.length !== 0) {
+			for (var counter = 0; counter < item.condiments.length; counter++) {
+			  returnString = returnString + condimentDictionary[item.condiments[counter]].name + ", ";
+		   }
+		}
+		return returnString.substring(0, returnString.length - 2); // trim the extra ,
   }
+
+  return "";
+}
+
+function addCartToOrderHistory(orderName) {
+	// check local storage to see if it exists, if not, create it
+	var orderHistory = JSON.parse(window.localStorage.getItem(PREVIOUS_ORDER_HISTORY));
+	if (orderHistory === null || orderHistory === undefined) {
+		orderHistory = [];
+	}
+
+	var orderFound = false;
+	var counter = 0;
+	if (orderHistory.length > 0 ) {
+		counter = orderHistory.length;
+	}
+
+	// replace it if it already exists
+	for (var i = 0; i < orderHistory.length; i++) {
+		order = orderHistory[i];
+		if (order.name == orderName) {
+			order.cart = getVarFromSession(CART_SESSION_KEY);
+			order.date = new Date();
+			orderFound = true;
+		}
+	}
+
+	// add it if it doesn't exist
+	if (!orderFound) {
+		var order = { name: orderName, date: new Date(), cart: getVarFromSession(CART_SESSION_KEY) };
+		orderHistory[counter] = order;
+	}
+
+	window.localStorage.setItem(PREVIOUS_ORDER_HISTORY, JSON.stringify(orderHistory));
 }
 
 function decrementCart(itemId) {
@@ -365,4 +435,11 @@ function addJsonToSession(id, item) {
 
 function getJsonFromSession(id) {
 	return JSON.parse(window.sessionStorage.getItem(id));
+}
+
+function strStartsWith(str, prefix) {
+    return str.indexOf(prefix) === 0;
+}
+function strEndsWith(str, suffix) {
+    return str.match(suffix+"$")==suffix;
 }
