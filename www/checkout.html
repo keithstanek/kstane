@@ -193,8 +193,8 @@
              </div>
              <div class="col-sm-12">
                  <div class="text-center">
-                     <p class="checkbox-grid">
-                        <a href="" onclick="submitOrder();return false;" class="promo-code-btn btn btn-lg btn-primary"><i class="fa fa-lock"></i>&nbsp;Place Secure Order</a>
+                     <p class="">
+                        <a href="" onclick="submitOrder();return false;" class="promo-code-btn btn btn-lg btn-primary"><i class="fa fa-lock"></i>&nbsp;&nbsp;&nbsp;Place Secure Order</a>
                         <a href="home.html" class="promo-code-btn btn-lg btn-danger">Cancel</a>
                      </p>
                  </div>
@@ -216,7 +216,7 @@
                         <p></p>
                         <p>
                            <span style="color: red; font-weight: bold;">
-                              ** There is a 15% charge for delivery<br>
+                              ** There is an additional charge for delivery<br>
                               ** Delivery service is only available in Russellville city limits.
                            </span>
                         </p>
@@ -367,6 +367,7 @@
           data: JSON.stringify(request),
           success: function(data, textStatus, jqXHR){
              var r = JSON.parse(data);
+             //alert(data)
              addVarToSession(ORDER_CONFIRMATION_NO_SESSION_KEY, r.response.orderId);
              addVarToSession(ORDER_CONFIRMATION_NAME_SESSION_KEY, name);
 
