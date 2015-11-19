@@ -58,7 +58,7 @@
                   <li><a href="view_cart.html">View Cart</a></li>
                   <li class="active"><a href="login.html">Login/Logout</a></li>
                   <li><a href="previous_order.html">Previous Orders</a></li>
-                  <li><a href="contact_us.html">Contact Us</a></li>
+                  <li><a href="user_info.html">Settings</a></li>
                </ul>
             </div>
          </div>
@@ -119,7 +119,6 @@
             if($("#chkRemember").is(':checked')) {
                window.localStorage.setItem("user", JSON.stringify(u));
             }
-            displayModal("Login", "Login Successful");
             window.location.href = "home.html";
          },
          error: function(jqXHR, textStatus, errorThrown){
@@ -140,6 +139,7 @@
       window.localStorage.setItem("user", null);
       displayModal("Logout", "You have been loged out.");
       $("#btnLogout").hide();
+      $("#btn-reset-password").show();
       $("#btnLogin-Register").hide();
       $("#btnLogin").show();
       $("#topDiv").show();
@@ -150,6 +150,44 @@
       $("#modal-title").text(title);
       $("#modal-body").text(body);
       $("#modal").modal('show')
+   }
+
+   function showResetPasswordModal() {
+      $("#pw-reset-modal").modal('show');
+   }
+
+   function resetPassword() {
+      var request = {
+          "email": $("#pw-reset-email").val()
+      }
+
+      $.ajax({
+          type: 'POST',
+          contentType: 'application/json',
+          url: RESET_PASSWORD_URL,
+          dataType: "json",
+          data: JSON.stringify(request),
+          success: function(data, textStatus, jqXHR){
+             $("#pw-reset-modal").modal('hide');
+             //alert(JSON.stringify(data));
+             var r = data;
+             if (r.response.error != "" && r.response.error != undefined) {
+                displayModal("Password Reset", "The email address [" + $("#pw-reset-email").val() +
+                             "] does not appear to be valid. Please try again.");
+                return;
+             }
+
+             displayModal("Password Reset", "An email has been sent to " + $("#pw-reset-email").val() + ". Please check your email for your password. If you don't see it in your inbox, " +
+                          "please check your junk mail.");
+             $("#pw-reset-email").val("");
+          },
+          error: function(jqXHR, textStatus, errorThrown){
+             alert('addWine error: ' + textStatus +' ' + errorThrown + ' ' + JSON.stringify(jqXHR));
+             $("#pw-reset-modal").modal('hide');
+             displayModal("Password Reset Error", JSON.stringify(jqXHR).responseText);
+
+          }
+      });
    }
 
    function register() {
@@ -205,13 +243,25 @@
           data: JSON.stringify(request),
           success: function(data, textStatus, jqXHR){
              var r = JSON.parse(data);
-             alert(r.response);
+             if (r.response.result == "USER EXISTS") {
+                displayModal("Registration Error", "The email address is already registered. If you forgot your password, " +
+                "please click the \"Login\" button and then reset your password.");
+                return;
+             }
+
+             displayModal("Registration", "Registration Successful");
+             showLoginView();
+             $("#txtEmail").val("");
+             $("#txtPassword").val("");
+             $("#txtPassword-2").val("");
+             $("#txtPhone").val("");
+             $("#txtLastName").val("");
+             $("#txtFirstName").val("");
           },
           error: function(jqXHR, textStatus, errorThrown){
              alert('addWine error: ' + textStatus +' ' + errorThrown + ' ' + JSON.stringify(jqXHR));
           }
       });
-      e.preventDefault();
    }
    </script>
    <script type="text/javascript" src="js/constants.js"></script>
@@ -237,6 +287,8 @@
                <p>
                   <button type="button" id="btnLogin" onclick="login(); return false;" class="btn btn-primary">Login</button>
                   &nbsp;&nbsp;&nbsp;
+                  <button type="button" id="btn-reset-password" onclick="showResetPasswordModal();" class="btn btn-primary">Reset Password</button>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   <button type="button" id="btnLogin-Register" onclick="showRegistrationView();" class="btn btn-primary">Register Now</button>
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   <button type="button" id="btnLogout" onclick="logout(); return false;" class="btn btn-danger" style="display: none;">Logout</button>
@@ -295,6 +347,27 @@
            </div>
          </div>
        </div>
+       <div id="pw-reset-modal" class="modal fade">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="modal-title">Password Reset</h4>
+              </div>
+              <div class="modal-body">
+                <p id="modal-body">Please enter your email address. A new password will be sent there.</p>
+                <div class="form-group">
+                  <input type="email" id="pw-reset-email" class="form-control" maxlength="75" required="required" placeholder="my-address@example.com">
+               </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-lrg btn-primary" onclick="resetPassword();">Reset Password</button>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <button type="button" class="btn btn-lrg btn-danger" data-dismiss="modal">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
    </section>
    <!--/#footer-->
 

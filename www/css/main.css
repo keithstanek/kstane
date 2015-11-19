@@ -2861,6 +2861,10 @@ span.stButton_gradient,
    margin-top: 15px;
 }
 
+.groupItemsCondimentsViewable {
+   margin-top: 15px;
+}
+
 .groupItemsCondimentsHeader {
    font-weight: bold;
    width: 100%;
@@ -2880,6 +2884,29 @@ span.stButton_gradient,
   border-bottom: 1px rgba(0, 0, 0, 0.25) solid;
 }
 
+.home-margin {
+   margin: 2px;
+}
+
 .my-block {
    display: inline-block;
+}
+
+.my-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  width: 100%;
+  height: 20px;
+  background-color: white;
+}
+
+.cell-one {
+   text-align: right;
+   width: 100px;
+}
+.cell-two {
+   text-align: left;
+   width: 75px;
 }

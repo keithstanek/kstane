@@ -138,6 +138,7 @@ function removeItemFromCart() {
          }
 
 			delete cart.items[i];
+         cart.items = $.grep(cart.items,function(n){ return(n) });
 			addJsonToSession(CART_SESSION_KEY, cart);
          $("#cartTableRow_" + cartIdentifierId).next().remove();
          $("#cartTableRow_" + cartIdentifierId).remove();
@@ -145,6 +146,18 @@ function removeItemFromCart() {
          loadCartText();
 		}
 	}
+
+   // remove any left over promo codes if there aren't any items in the cart
+   var itemCount = 0;
+   for (var i = 0; i < cart.items.length; i++) {
+		if (cart.items[i] === null) {
+			continue;
+		}
+      itemCount++;
+   }
+   if (itemCount === 0) {
+      removePromoCode();
+   }
 }
 
 function addPromoCode() {

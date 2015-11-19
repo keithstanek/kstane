@@ -49,11 +49,17 @@ function addComboItems(itemGroup, item) {
       // now we are going to get a list of all the items for this groups
       for (var k = 0; k < group.items.length; k++) {
          var currentItem = group.items[k];
+         var itemChecked = "", viewable = "";
+         if (k == 0) {
+            itemChecked = "checked=\"checked\" ";
+            viewable = "Viewable";
+         }
 
          var itemLabelStart = "<label class=\"checkbox-btn btn nohover btn-default\" " +
               "onclick=\"displayGroupItemsCondiments(" + item.id + ", " + group.id + ", " + currentItem.id +
-              ", [" + itemIdListForArray + "]);\"><input type=\"radio\" name=\"group_" + group.id + "_item\" id=\"group_" + group.id + "_item\" value=\"" + currentItem.id + "\">&nbsp;&nbsp;" + currentItem.name +
-              "<div id=\"group_" + group.id + "_item_" + currentItem.id + "_condiments\" class=\"groupItemsCondiments checkbox-grid\">";
+              ", [" + itemIdListForArray + "]);\"><input type=\"radio\" name=\"group_" + group.id + "_item\" id=\"group_" +
+              group.id + "_item\" value=\"" + currentItem.id + "\" " + itemChecked + ">&nbsp;&nbsp;" + currentItem.name +
+              "<div id=\"group_" + group.id + "_item_" + currentItem.id + "_condiments\" class=\"groupItemsCondiments" + viewable + " checkbox-grid\">";
 
          var itemLabelEnd = "</div></label>";
          itemLabelStart += getCondimentHtml(currentItem.condiments, currentItem, true, "group_" + group.id + "_item_" + currentItem.id + "_");
@@ -70,7 +76,7 @@ function addComboItems(itemGroup, item) {
 
 function getCondimentHtml(condiments, item, isButtonSmall, groupName) {
    var upSellList = "", returnHtml = "";
-   var checkboxType = "checkbox", itemChecked = "";
+   var checkboxType = "checkbox";
    if (item.oneCondimentOnly == true) {
       checkboxType = "radio";
    }
@@ -79,6 +85,7 @@ function getCondimentHtml(condiments, item, isButtonSmall, groupName) {
        var counter = 0;
        for (counter; counter < condiments.length; counter++) {
          var itemCondimentId = condiments[counter];
+         var itemChecked = "";
          if (checkboxType == "radio" && counter == 0) {
             itemChecked = "checked=\"checked\"";
          }
@@ -163,7 +170,7 @@ function addToCart(itemId) {
       }
    });
 
-   // don't check combos for, just regular items
+   // don't check combos for duplicates, just regular items
    var itemListItem = getItemById(itemId);
    var itemArray = [];
    var itemArrayCounter = 0;
@@ -205,7 +212,7 @@ function addToCart(itemId) {
          itemArray[itemArrayCounter++] = newItem;
       }
    }
-   
+
    // lets check the combo
    var combo = false;
    if (itemArray.length > 0) {

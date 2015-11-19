@@ -58,7 +58,7 @@
                         <li><a href="view_cart.html">View Cart</a></li>
                         <li><a href="login.html">Login/Logout</a></li>
                         <li class="active"><a href="previous_order.html">Previous Orders</a></li>
-                        <li><a href="contact_us.html">Contact Us</a></li>
+                        <li><a href="user_info.html">Settings</a></li>
                     </ul>
                 </div>
             </div>
@@ -113,8 +113,8 @@
          }
          var div = "<div class=\"view-cart-item-table\"><div id=\"cart-summary\" class=\"previous-order-top-left\">" +
             "<p class=\"view-cart-item-header\">" + order.name + "</p>" + loadPreviousOrderCartSummary(JSON.parse(order.cart)) +
-            "</div><div class=\"previous-order-top-right\"><label class=\"checkbox-btn btn btn-large btn-success\" onclick=\"checkout('" + order.name + "')\">" +
-            "<i class=\"fa fa-lock\"></i>&nbsp;&nbsp;Checkout</label><label onclick=\"removeOrder(true, '" + order.name +
+            "</div><div style=\"vertical-align: top;\" class=\"previous-order-top-right\"><label class=\"checkbox-btn btn btn-large btn-success\" onclick=\"checkout('" + order.name + "')\">" +
+            "<i class=\"fa fa-lock\"></i>&nbsp;&nbsp;Checkout</label><label onclick=\"showRemoveModal('" + order.name +
             "'); return false;\" class=\"checkbox-btn btn btn-danger\"><i class=\"fa fa-trash\"></i>&nbsp;&nbsp;Remove</label></div></div><br>";
          $("#historyTable").append(div);
    	}
@@ -131,9 +131,21 @@
       }
     }
 
+    function showRemoveModal(orderName) {
+      $("#remove-order-name").text(orderName);
+      $("#modal").modal({
+         backdrop: 'static',
+         keyboard: false
+      })
+    }
+
     function removeOrder(reloadPage, orderName) {
         var orderHistory = JSON.parse(window.localStorage.getItem(PREVIOUS_ORDER_HISTORY));
 
+        if (orderName === "") {
+           $("#modal").modal('hide');
+           orderName = $("#remove-order-name").text();
+        }
         // replace it if it already exists
         for (var i = 0; i < orderHistory.length; i++) {
            order = orderHistory[i];
@@ -179,21 +191,22 @@
         <div id="historyTable" class="container" style="margin-top: -70px;">
            <h2 class="page-header">Order History</h2>
         </div>
-        <div id="modal" class="modal fade">
-           <div class="modal-dialog">
+       <div id="modal" class="modal fade">
+          <div class="modal-dialog">
             <div class="modal-content">
-               <div class="modal-header">
-                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                 <h4 class="modal-title">Checkout</h4>
-               </div>
-               <div class="modal-body">
-                 <p id="modal-message"></p>
-               </div>
-               <div class="modal-footer">
-                 <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
-               </div>
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Order History</h4>
+              </div>
+              <div class="modal-body">
+                <p>You are about to remove the order "<span id="remove-order-name"></span>" from your order history. Would you like to continue?</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Keep Order</button>
+                <button type="button" class="btn btn-danger" onclick="removeOrder(true, ''); return false;" >Remove Order</button>
+              </div>
             </div>
-           </div>
+          </div>
         </div>
     </section>
     <!--/#footer-->

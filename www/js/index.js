@@ -28,6 +28,7 @@ var app = {
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
         document.addEventListener("resume", onResume, false);
+        //document.addEventListener("pause", onPause, false);
     },
     // deviceready Event Handler
     //
@@ -48,6 +49,34 @@ var app = {
         console.log('Received Event: ' + id);
     }
 };
+
+function onPause() {
+   cordova.plugins.notification.local.hasPermission(function(granted){
+      if(granted == true) {
+        schedule(id, title, message, schedule_time);
+      } else {
+        cordova.plugins.notification.local.registerPermission(function(granted) {
+         if(granted == true) {
+           schedule(id, title, message, schedule_time);
+         } else {
+           navigator.notification.alert("Reminder cannot be added because app doesn't have permission");
+         }
+        });
+      }
+   });
+   //var sound = device.platform == 'Android' ? 'file://sound.mp3' : 'file://beep.caf';
+   var t = new Date();
+   t.setSeconds(t.getSeconds() + 10);
+
+   cordova.plugins.notification.local.schedule({
+       id: 1,
+       title: "Message Title",
+       message: "Message Text",
+       at: t
+       //sound: sound,
+       //icon: "http://domain.com/icon.png"
+   });
+}
 
 function onResume() {
    setTimeout(function() {

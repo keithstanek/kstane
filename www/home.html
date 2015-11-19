@@ -58,7 +58,7 @@
                         <li><a href="view_cart.html">View Cart</a></li>
                         <li><a href="login.html">Login/Logout</a></li>
                         <li><a href="previous_order.html">Previous Orders</a></li>
-                        <li><a href="contact_us.html">Contact Us</a></li>
+                        <li><a href="user_info.html">Settings</a></li>
                     </ul>
                 </div>
             </div>
@@ -74,7 +74,7 @@
     </style>
     <section id="services">
         <div class="container" style="margin-top: -70px;" >
-           <div class="padding wow fadeIn" data-wow-duration="1000ms" data-wow-delay="900ms">
+           <!-- <div class="padding wow fadeIn" data-wow-duration="1000ms" data-wow-delay="900ms">
               <div class="sidebar blog-sidebar">
                  <div class="sidebar-item recent">
                     <h3 style="text-align: center;"><font color="Green">Hungry?</font></h3>
@@ -114,32 +114,127 @@
                     </div>
                  </div>
               </div>
-           </div>
-           <div style="center">
-              <div class="text-center padding wow fadeIn" data-wow-duration="1000ms" data-wow-delay="900ms">
-                 <div class="single-service" style="verticle-align: center;">
-                    <h2>Login</h2>
-                    <div class="wow scaleIn" data-wow-duration="500ms" data-wow-delay="900ms">
-                       <div class="contact-form bottom">
-                          <form id="main-contact-form" name="contact-form" method="post" action="sendemail.php">
-                             <div class="form-group">
-                                <input type="email" name="email" class="form-control" required="required" placeholder="Email">
-                             </div>
-                             <div class="form-group">
-                                <input type="password" name="password" class="form-control" required="required" placeholder="Password">
-                             </div>
-                             <div class="form-group">
-                                <input type="submit" name="submit" class="btn btn-primary" value="Login">&nbsp;&nbsp;&nbsp;
-                                <input type="submit" name="submit" class="btn btn-success" value="Register"><br>
-                                <input type="submit" name="submit" class="btn btn-danger" value="Continue As Guest">
-                             </div>
-                          </form>
-                       </div>
-                    </div>
+           </div> -->
+           <script>
+           function callStore() {
+              var phoneNumber = getJsonFromSession(RESTAURANT_SESSION_KEY).phone;
+              window.open('tel:' + phoneNumber, '_system');
+           }
+
+           function loadInfo() {
+              var restaurant = getJsonFromSession(RESTAURANT_SESSION_KEY);
+              $("#phone-number").text(restaurant.phone);
+              $("#address").text(restaurant.address);
+              $("#city").text(restaurant.city);
+              $("#state").text(restaurant.state);
+              $("#zip").text(restaurant.zip);
+              $("#store-location").text(restaurant.city + ", " + restaurant.state);
+
+              var day = new Date().getDay(); // Sunday is 0, Monday 1 .... Saturday 6
+              var openTime = "", closeTime = "";
+              if (day == 0) {
+                 openTime = restaurant.hours.sundayOpenTime;
+                 closeTime = restaurant.hours.sundayCloseTime;
+              } else if (day == 1) {
+                 openTime = restaurant.hours.mondayOpenTime;
+                 closeTime = restaurant.hours.mondayCloseTime;
+              } else if (day == 2) {
+                 openTime = restaurant.hours.tuesdayOpenTime;
+                 closeTime = restaurant.hours.tuesdayCloseTime;
+              } else if (day == 3) {
+                 openTime = restaurant.hours.wednesdayOpenTime;
+                 closeTime = restaurant.hours.wednesdayCloseTime;
+              } else if (day == 4) {
+                 openTime = restaurant.hours.thursdayOpenTime;
+                 closeTime = restaurant.hours.thursdayCloseTime;
+              } else if (day == 5) {
+                 openTime = restaurant.hours.fridayOpenTime;
+                 closeTime = restaurant.hours.fridayCloseTime;
+              } else if (day == 6) {
+                 openTime = restaurant.hours.saturdayOpenTime;
+                 closeTime = restaurant.hours.saturdayCloseTime;
+              }
+
+              var closings = restaurant.closings;
+              var currentDate = new Date();
+              	for (var i = 0; i < closings.length; i++) {
+              		var closingDate = closings[i].closingDate;
+              		closingDate = new Date(Date.parse(closingDate.replace('-','/','g')));
+
+              		if ( (closingDate.getYear() == currentDate.getYear()) &&
+              		     (closingDate.getMonth() == currentDate.getMonth()) &&
+              	        (closingDate.getDay() == currentDate.getDay()) )
+              		{
+              			openTime = closings[i].openTime;
+              			closeTime = closings[i].closeTime;
+                     $("#modal-message").text(closings[i].reason);
+           				$("#modal").modal({
+           		         visibility: 'show',
+           		         backdrop: 'static',
+           		         keyboard: false});
+              		}
+              	}
+
+              $("#time-open").text(openTime);
+              $("#time-close").text(closeTime);
+
+              var status = "<font color=\"green\">Open</font>";
+              if ( !isStoreOpen() ) {
+                 status = "<font color=\"red\">Closed</font>";
+              }
+              $("#store-status").html(status);
+           }
+           </script>
+           <p>&nbsp;</p>
+           <!-- <div class="col-sm-12"><img class="img-responsive img-rounded img-thumbnail" src="images/hamburger.jpg"></div> -->
+           <div class="col-sm-12" style="text-align: center;"><img class="img-responsive img-rounded img-thumbnail" src="images/burger.jpg"></div>
+           <div class="row home-margin" >
+              <div class="col-xs-6">
+                   <p><b>
+                      Today's Hours:<br><span id="time-open"></span>am-<span id="time-close"></span>pm<br>
+                      The Store is <b><span id="store-status"></span><b>
+                   </b></p>
+                   <!-- <p>Status: <span style="font-weight: bold;" id="store-status"></span></p> -->
+                   <!-- <p><span style="color: red;">** Excludes Holidays and other reasons the store may
+                   be closed <br>ie. Natural Disasters</span></p> -->
+             </div>
+             <div class="col-xs-6">
+                   <p>
+                      <span id="address"></span><br>
+                      <span id="city"></span>, <span id="state"></span> <span id="zip"></span>
+                   </p>
+             </div>
+             <div class="col-xs-12" style="text-align: center">
+                <p><a href="" class="btn btn-success" onclick="callStore(); return false;">
+                   <i class="fa fa-phone"></i>&nbsp;&nbsp;<span id="phone-number"><span>
+                </a></p>
+             </div>
+          </div>
+          <div class="col-sm-6">
+             <a href="menu.html" class="promo-code-btn btn btn-lg btn-primary"><i class="fa fa-lock"></i>&nbsp;&nbsp;Order Online</a>
+          </div>
+          <div class="col-sm-6">
+             <a href="previous_order.html" class="promo-code-btn btn btn-lg btn-primary">Previous Orders</a>
+          </div>
+
+          <div id="modal" class="modal fade">
+             <div class="modal-dialog">
+               <div class="modal-content">
+                 <div class="modal-header">
+                   <h4 class="modal-title">Restaurant Closed</h4>
                  </div>
-              </div>
+                 <div class="modal-body">
+                   <p>
+                     <div style="text-align: center;">
+                        <span id="modal-message"></span>
+                     </div>
+                   </p>
+                 </div>
+                 <div class="modal-footer"><button type="button" class="btn btn-primary" data-dismiss="modal">OK</button></div>
+               </div>
+             </div>
            </div>
-        </div>
+       </div>
     </section>
     <!--/#footer-->
 

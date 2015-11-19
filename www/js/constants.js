@@ -26,7 +26,7 @@ var PREVIOUS_ORDER_HISTORY = "PREVIOUS_ORDER_HISTORY";
 
 var RESTAURANT_ID = "1";
 
-var URL_HOST = "http://api.hectorfirst.org";
+var URL_HOST = "http://api.menu-junction.com";
 //var URL_HOST = "http://127.0.0.1/~kstane/mobile/rest-api";
 
 var LOGIN_URL = URL_HOST + "/user/index.php/login";
@@ -34,6 +34,10 @@ var REGISTRATION_URL = URL_HOST + "/user/index.php/register";
 var MENU_URL = URL_HOST + "/restaurant/index.php/menu/" + RESTAURANT_ID;
 var PROMO_URL = URL_HOST + "/order/index.php/promo/";
 var SUBMIT_ORDER_URL = URL_HOST + "/order/index.php/create";
+var UPDATE_PASSWORD_URL = URL_HOST + "/user/index.php/change-password";
+var UPDATE_USER_INFO_URL = URL_HOST + "/user/index.php/update-user";
+var RESET_PASSWORD_URL = URL_HOST + "/user/index.php/reset-password";
+
 
 
 // var CONSTANTS = {

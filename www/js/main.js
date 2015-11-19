@@ -24,11 +24,9 @@ jQuery(function($) {'use strict';
 		});
 	});
 
-	//Initiat WOW JS
-	//new WOW().init();
-
 	// portfolio filter
 	$(document).ready(function(){
+
 		// on initial load, go get the infomration
 		if (page === "index") {
 			getRestaurantInfo();
@@ -45,6 +43,7 @@ jQuery(function($) {'use strict';
 
 		if (userLoggedIn &&  page === "login") {
 			$("#btnLogin").hide();
+			$("#btn-reset-password").hide();
 			$("#topDiv").hide();
 			$("#btnLogin-Register").hide();
 			$("#btnLogout").show();
@@ -56,6 +55,14 @@ jQuery(function($) {'use strict';
 
 		if (page === "previous_order") {
 			loadPreviousOrders();
+		}
+
+		if (page === "home") {
+			loadInfo();
+		}
+
+		if (page === "user_info") {
+			loadInfo();
 		}
 
 		if (page === "menu") {
@@ -72,7 +79,7 @@ jQuery(function($) {'use strict';
 
 		if (page === "order_confirmation") {
 			loadOrderConfirmText();
-			window.sessionStorage.setItem(CART_SESSION_KEY, null);
+			window.sessionStorage.removeItem(CART_SESSION_KEY);
 			removePromoCode();
 		}
 
@@ -85,109 +92,22 @@ jQuery(function($) {'use strict';
 				fillInForm();
 			}
 		}
-
-		// $('.main-slider').addClass('animate-in');
-		// $('.preloader').remove();
-		//End Preloader
-
-		// if( $('.masonery_area').length ) {
-		// 	$('.masonery_area').masonry();//Masonry
-		// }
-
-		// var $portfolio_selectors = $('.portfolio-filter >li>a');
-		//
-		// if($portfolio_selectors.length) {
-		//
-		// 	var $portfolio = $('.portfolio-items');
-		// 	$portfolio.isotope({
-		// 		itemSelector : '.portfolio-item',
-		// 		layoutMode : 'fitRows'
-		// 	});
-		//
-		// 	$portfolio_selectors.on('click', function(){
-		// 		$portfolio_selectors.removeClass('active');
-		// 		$(this).addClass('active');
-		// 		var selector = $(this).attr('data-filter');
-		// 		$portfolio.isotope({ filter: selector });
-		// 		return false;
-		// 	});
-		// }
 	});
-
-	function loggedIn() {
-		var userInfo = JSON.parse(window.sessionStorage.getItem("user"));
-		if (userInfo === null) {
-			// they may be in the local storage, check there
-			var user = JSON.parse(window.localStorage.getItem("user"));
-			if (user !== null) {
-				return true;
-			}
-			return false;
-		}
-		return true;
-	}
-
-
-	$('.timer').each(count);
-	function count(options) {
-		var $this = $(this);
-		options = $.extend({}, options || {}, $this.data('countToOptions') || {});
-		$this.countTo(options);
-	}
-
-	// Search
-	$('.fa-search').on('click', function() {
-		$('.field-toggle').fadeToggle(200);
-	});
-
-	// Contact form
-	var form = $('#main-contact-form');
-	form.submit(function(event){
-		event.preventDefault();
-		var form_status = $('<div class="form_status"></div>');
-		$.ajax({
-			url: $(this).attr('action'),
-			beforeSend: function(){
-				form.prepend( form_status.html('<p><i class="fa fa-spinner fa-spin"></i> Email is sending...</p>').fadeIn() );
-			}
-		}).done(function(data){
-			form_status.html('<p class="text-success">Thank you for contact us. As early as possible  we will contact you</p>').delay(3000).fadeOut();
-		});
-	});
-
-	// Progress Bar
-	$.each($('div.progress-bar'),function(){
-		$(this).css('width', $(this).attr('data-transition')+'%');
-	});
-
-	if( $('#gmap').length ) {
-		var map;
-
-		map = new GMaps({
-			el: '#gmap',
-			lat: 43.04446,
-			lng: -76.130791,
-			scrollwheel:false,
-			zoom: 16,
-			zoomControl : false,
-			panControl : false,
-			streetViewControl : false,
-			mapTypeControl: false,
-			overviewMapControl: false,
-			clickable: false
-		});
-
-		map.addMarker({
-			lat: 43.04446,
-			lng: -76.130791,
-			animation: google.maps.Animation.DROP,
-			verticalAlign: 'bottom',
-			horizontalAlign: 'center',
-			backgroundColor: '#3e8bff',
-		});
-	}
-
 });
+
+function loggedIn() {
+	var userInfo = getJsonFromSession(USER_SESSION_KEY);
+	if (userInfo === null) {
+		// they may be in the local storage, check there
+		var user = JSON.parse(window.localStorage.getItem(USER_SESSION_KEY));
+		if (user !== null) {
+			addJsonToSession(USER_SESSION_KEY, user); // add to session so we don't get here anymore
+			return true;
+		}
+		return false;
+	}
+	return true;
+}
 
 function loadCartText() {
 	var cart = window.sessionStorage.getItem(CART_SESSION_KEY);
@@ -236,23 +156,71 @@ function getItemById(itemId) {
 }
 
 function getCondimentById(id) {
-	var condimentList = getJsonFromSession(CONDIMENT_LIST_SESSION_KEY);
-	for (var i =0; i < condimentList.length; i++) {
-		if (condimentList[i] === null) {
-			continue;
-		}
-		if (condimentList[i].id === id) {
-			return condimentList[i];
-		}
+	var condimentList = getCondimentDictionary();
+	var condiment = condimentList[id];
+	if (condiment == null) {
+		return null;
 	}
+	return condiment;
+}
+
+function convertTo24HRTimeFormat(time) {
+	// var time = $("#starttime").val();
+	var hours = Number(time.match(/^(\d+)/)[1]);
+	var minutes = Number(time.match(/:(\d+)/)[1]);
+	var AMPM = time.match(/\s(.*)$/)[1];
+	if(AMPM == "PM" && hours<12) hours = hours+12;
+	if(AMPM == "AM" && hours==12) hours = hours-12;
+	var sHours = hours.toString();
+	var sMinutes = minutes.toString();
+	if(hours<10) sHours = "0" + sHours;
+	if(minutes<10) sMinutes = "0" + sMinutes;
+	return sHours + ":" + sMinutes;
 }
 
 function isStoreOpen() {
 	var restaurant = getJsonFromSession(RESTAURANT_SESSION_KEY);
-	var openTime = restaurant.timeOpen;
-	var closeTime = restaurant.timeClose;
+	var openTime = "", closeTime = "";
 
+	var day = new Date().getDay(); // Sunday is 0, Monday 1 .... Saturday 6
+	var openTime = "", closeTime = "";
+	if (day == 0) {
+		openTime = restaurant.hours.sundayOpenTime;
+		closeTime = convertTo24HRTimeFormat(restaurant.hours.sundayCloseTime + " PM");
+	} else if (day == 1) {
+		openTime = restaurant.hours.mondayOpenTime;
+		closeTime = convertTo24HRTimeFormat(restaurant.hours.mondayCloseTime + " PM");
+	} else if (day == 2) {
+		openTime = restaurant.hours.tuesdayOpenTime;
+		closeTime = convertTo24HRTimeFormat(restaurant.hours.tuesdayCloseTime + " PM");
+	} else if (day == 3) {
+		openTime = restaurant.hours.wednesdayOpenTime;
+		closeTime = convertTo24HRTimeFormat(restaurant.hours.wednesdayCloseTime + " PM");
+	} else if (day == 4) {
+		openTime = restaurant.hours.thursdayOpenTime;
+		closeTime = convertTo24HRTimeFormat(restaurant.hours.thursdayCloseTime + " PM");
+	} else if (day == 5) {
+		openTime = restaurant.hours.fridayOpenTime;
+		closeTime = convertTo24HRTimeFormat(restaurant.hours.fridayCloseTime + " PM");
+	} else if (day == 6) {
+		openTime = restaurant.hours.saturdayOpenTime;
+		closeTime = convertTo24HRTimeFormat(restaurant.hours.saturdayCloseTime + " PM");
+	}
+
+	// check to see if the store is closed for some emergency or something else
+	var closings = restaurant.closings;
 	var currentDate = new Date();
+	for (var i = 0; i < closings.length; i++) {
+		var closingDate = closings[i].closingDate;
+		closingDate = new Date(Date.parse(closingDate.replace('-','/','g')));
+
+		if ( (closingDate.getYear() == currentDate.getYear()) &&
+		     (closingDate.getMonth() == currentDate.getMonth()) &&
+	        (closingDate.getDay() == currentDate.getDay()) )
+		{
+			return false;
+		}
+	}
 
 	var startDate = new Date();
 	startDate.setHours(openTime.substring(0, openTime.indexOf(":")));
@@ -289,6 +257,9 @@ function buildCondimentList(item) {
 		returnString = ":<br>";
 		for (var i = 0; i < item.itemGroups.length; i++) {
 			var group = item.itemGroups[i];
+			if (group == null || group == undefined) {
+				continue;
+			}
 			var itemId = group.id;
 			var currentItem = getItemById(itemId);
 			returnString += currentItem.name;
@@ -442,4 +413,17 @@ function strStartsWith(str, prefix) {
 }
 function strEndsWith(str, suffix) {
     return str.match(suffix+"$")==suffix;
+}
+
+function getCondimentDictionary() {
+	var list = JSON.parse(window.sessionStorage.getItem(CONDIMENT_LIST_SESSION_KEY));
+	var dictionary = [];
+	for (var i = 0; i < list.length; i++) {
+		condiment = list[i];
+		if (condiment == null) {
+			continue;
+		}
+		dictionary[condiment.id] = condiment;
+	}
+	return dictionary;
 }
