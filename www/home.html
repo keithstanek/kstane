@@ -79,47 +79,6 @@
     </style>
     <section id="services">
         <div class="container" style="margin-top: -70px;" >
-           <!-- <div class="modal fade" id="restaurant-list-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
-              <div class="modal-dialog" style="overflow-y: scroll; max-height:85%;  margin-top: 50px; margin-bottom:50px;">
-                 <div class="modal-content">
-                    <div class="modal-header">
-                         <h3 class="modal-title">Choose A Restaurant</h3>
-                    </div>
-                    <div class="modal-body">
-                       <table id="restaurant-list">
-                          <tr>
-                             <td>
-                                ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF
-                               ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF
-                               ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF
-                               ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF
-                               ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF
-                               ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF
-                               ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF
-                               ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF
-                               ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF
-                               ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF
-                               ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF
-                               ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDFASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF
-                              ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF
-                              ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF
-                              ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF
-                              ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF
-                              ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF
-                              ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF
-                              ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF
-                              ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF
-                              ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF
-                              ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF
-                              ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF ASFASDFASDFASDF
-                             </td>
-                          </tr>
-                       </table>
-                    </div>
-                    <div class="modal-footer">&nbsp;</div>
-                 </div>
-              </div>
-           </div> -->
            <div id="restaurant-list-modal" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -139,12 +98,20 @@
 
            function showRestaurantList() {
                var restaurant = getJsonFromSession(RESTAURANT_SESSION_KEY);
+               var restaurantList = getJsonFromSession(RESTAURANT_LIST_SESSION_KEY);
+
+               if (restaurantList.length > 1) {
+                  $("#change-restaurant-btn").show();
+               } else {
+                  $("#change-restaurant-btn").hide();
+               }
+
                if (restaurant != null && restaurant != "") {
                   loadInfo();
                   return;
                }
-               var restaurantList = getJsonFromSession(RESTAURANT_LIST_SESSION_KEY);
-               if (restaurantList.length > 0) {
+
+               if (restaurantList.length > 1) {
                   displayRestaurantModal();
                   return;
                }
@@ -220,7 +187,6 @@
            }
            </script>
            <p>&nbsp;</p>
-           <!-- <div class="col-sm-12"><img class="img-responsive img-rounded img-thumbnail" src="images/hamburger.jpg"></div> -->
            <div class="col-sm-12" style="text-align: center;"><img class="img-responsive img-rounded img-thumbnail" src="images/burger.jpg"></div>
            <div class="row home-margin" >
               <div class="col-xs-6">
@@ -228,9 +194,6 @@
                       Today's Hours:<br><span id="time-open"></span>am-<span id="time-close"></span>pm<br>
                       The Store is <b><span id="store-status"></span><b>
                    </b></p>
-                   <!-- <p>Status: <span style="font-weight: bold;" id="store-status"></span></p> -->
-                   <!-- <p><span style="color: red;">** Excludes Holidays and other reasons the store may
-                   be closed <br>ie. Natural Disasters</span></p> -->
              </div>
              <div class="col-xs-6">
                    <p>Location:<br>
@@ -250,7 +213,7 @@
           <div class="col-sm-6">
              <a href="previous_order.html" class="promo-code-btn btn btn-lg btn-primary">Previous Orders</a>
           </div>
-          <div class="col-sm-12">
+          <div class="col-sm-12" id="change-restaurant-btn">
              <label class="promo-code-btn btn btn-lg btn-primary" onclick="displayRestaurantModal();">Change Restaurant</label>
           </div>
 

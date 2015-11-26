@@ -119,11 +119,11 @@
                         <form>
                         <table>
                            <tr>
-                              <td><input type="radio" name="paymentType" onclick="toggleCCDiv();" checked id="rdoPayAtStore" value="pay-at-store">&nbsp;&nbsp;</td>
-                              <td>Pay at pick-up time - <span style="color: red">** NOTE: You can pay with your credit/debit/gift card at the store.</span></td>
+                              <td><input type="radio" name="paymentType" onclick="toggleCCDiv();" checked id="rdoPayAtStore" value="pay-at-store">&nbsp;&nbsp;&nbsp;</td>
+                              <td>Pay at store <span style="color: red">** NOTE: You can pay with your credit/debit/gift card at the store.</span></td>
                            </tr>
                            <tr>
-                              <td><input type="radio" name="paymentType" onclick="toggleCCDiv();" id="rdoCCPayment" value="credit-card">&nbsp;&nbsp;</td>
+                              <td><input type="radio" name="paymentType" onclick="toggleCCDiv();" id="rdoCCPayment" value="credit-card">&nbsp;&nbsp;&nbsp;</td>
                               <td valign="top">Credit Card</td>
                            </tr>
                         </table>
@@ -170,6 +170,19 @@
                         </form>
                      </p>
                   </div>
+             </div>
+             <div id="restaurant-info" style="display: none;" class="col-sm-12">
+                 <div class="testimonial bottom">
+                     <div class="category-underline"><h3><span class="category-header">Restaurant Info</span></h3></div>
+                 </div>
+                 <p></p>
+                 <p>
+                    <p>
+                       <span id="address"></span><br>
+                       <span id="city"></span>, <span id="state"></span> <span id="zip"></span><br>
+                       <label onclick="displayRestaurantModal();" class="btn btn-success">Choose Different Restaurant</label>
+                    </p>
+                 </p>
              </div>
              <div class="col-sm-12"  id="delivery-info">
                  <div class="contact-form bottom">
@@ -252,13 +265,12 @@
                      <div class="modal-footer">
                        <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
                      </div>
-                   </div><!-- /.modal-content -->
-                 </div><!-- /.modal-dialog -->
-               </div><!-- /.modal -->
+                   </div>
+                 </div>
+               </div>
          </div>
       </div>
     </section>
-    <!--/#footer-->
 
     <script type="text/javascript">
     var showCheckoutModal = true;
@@ -434,6 +446,23 @@
       }
       $("#txtOrderType").text(orderType);
       calculateCheckoutTotals();
+      var restaurantList = getJsonFromSession(RESTAURANT_LIST_SESSION_KEY);
+
+      if (restaurantList.length > 1) {
+         $("#restaurant-info").show();
+         //$("#phone-number").text(restaurant.phone);
+         loadInfo();
+      } else {
+         $("#restaurant-info").hide();
+      }
+   }
+
+   function loadInfo(id) {
+      var restaurant = getJsonFromSession(RESTAURANT_SESSION_KEY);
+      $("#address").text(restaurant.address);
+      $("#city").text(restaurant.city);
+      $("#state").text(restaurant.state);
+      $("#zip").text(restaurant.zip);
    }
 
    function loadCartSummary() {

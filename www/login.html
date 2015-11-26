@@ -242,8 +242,9 @@
           dataType: "json",
           data: JSON.stringify(request),
           success: function(data, textStatus, jqXHR){
-             var r = JSON.parse(data);
-             if (r.response.result == "USER EXISTS") {
+             //alert(JSON.stringify(data))
+             var r = data;
+             if (r.response != undefined && r.response.result == "USER EXISTS") {
                 displayModal("Registration Error", "The email address is already registered. If you forgot your password, " +
                 "please click the \"Login\" button and then reset your password.");
                 return;

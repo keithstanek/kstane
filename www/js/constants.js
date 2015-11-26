@@ -26,8 +26,8 @@ var RESTAURANT_LIST_SESSION_KEY = "restaurant-list";
 
 var FRANCHISE_ID = "1";
 
-//var URL_HOST = "http://api.menu-junction.com";
-var URL_HOST = "http://127.0.0.1/~kstane/mobile/rest-api";
+var URL_HOST = "http://api.menu-junction.com";
+//var URL_HOST = "http://127.0.0.1/~kstane/mobile/rest-api";
 
 var LOGIN_URL = URL_HOST + "/user/index.php/login";
 var REGISTRATION_URL = URL_HOST + "/user/index.php/register";
