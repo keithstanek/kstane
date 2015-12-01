@@ -67,6 +67,13 @@
     <!--/#header-->
     <script type="application/x-javascript">
     var page = "view_cart";
+
+    function addNotes(e) {
+       var cart = getJsonFromSession(CART_SESSION_KEY);
+       cart.notes = e.val();
+       addJsonToSession(CART_SESSION_KEY, cart);
+    }
+
     </script>
     <script type="text/javascript" src="js/constants.js"></script>
     <script src="js/menu.js"> </script>
@@ -100,14 +107,26 @@
                  <div style="display: table; width: 100%;">
                     <div style="display: table-row;">
                        <div style="display: table-cell; width: 50%;">
+                          <b>Notes for your Order:</b><br>
+                          <textarea id="order-notes" rows="4" style="width: 100%;" onblur="addNotes($(this))"></textarea>
+                       </div>
+                       <div style="display: table-cell; width: 50%;">
                             <div class="view-cart-spacer">&nbsp;</div>
                             <div class="view-cart-total">Sub-Total:&nbsp;&nbsp;$<span id="cart-subTotal">0.00</span></div>
                             <div class="view-cart-spacer">&nbsp;</div>
-                            <div class="view-cart-total"><span id="cart-promo-discount-text">Discount</span>:&nbsp;&nbsp;$<span id="cart-discount">0.00</span></div>
+                            <div class="view-cart-total"><span id="cart-promo-discount-text">Discount</span>:&nbsp;&nbsp;$<span style="color: red;" id="cart-discount">0.00</span></div>
+                            <div class="view-cart-spacer">&nbsp;</div>
+                            <div class="view-cart-total"><span>New Sub-Total</span>:&nbsp;&nbsp;$<span id="cart-sub-total-and-discount">0.00</span></div>
                             <div class="view-cart-spacer">&nbsp;</div>
                             <div class="view-cart-total">Tax:&nbsp;&nbsp;$<span id="cart-tax">0.00</span></div>
                             <div class="view-cart-spacer">&nbsp;</div>
                             <div class="view-cart-total">Total:&nbsp;&nbsp;$<span id="cart-total">0.00</span></div>
+                         </div>
+                      </div>
+                   </div>
+                   <div style="display: table; width: 100%;">
+                      <div style="display: table-row;">
+                        <div style="display: table-cell;">
                             <br>
                             <div class="checkbox-grid">
                                <a href="" class="promo-code-btn btn btn-primary" onclick='$("#addPromoCodeModal").modal("show"); return false;'>Add Promo Code</a>

@@ -115,7 +115,7 @@ function getCondimentHtml(condiments, item, isButtonSmall, groupName) {
        returnHtml += upSellList;
        // if not an even number, add an extra labeel to work out the kinks in the ui
        if (counter % 2 !== 0) {
-          returnHtml += "<label class=\"btn checkbox-btn btn-xs\">&nbsp;</label>";
+          returnHtml += "<label class=\"btn checkbox-btn" + buttonSize + "\">&nbsp;</label>";
        }
 
    } else {

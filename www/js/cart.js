@@ -5,6 +5,10 @@ function loadCartView() {
    if (cart === null) {
       return; // there are no items in the cart
    }
+
+   if (cart.notes != undefined) {
+      $("#order-notes").val(cart.notes);
+   }
 	var itemList = getItemList();
    for (var i =0; i < cart.items.length; i++) {
 		if (cart.items[i] === null) {
@@ -71,7 +75,6 @@ function updateCartItemQuantity(cartIdentifierId, quantity) {
 }
 
 function calculateCartTotals() {
-   var tax = 0.08;
    var subTotal = 0;
    var cart = getJsonFromSession(CART_SESSION_KEY);
 
@@ -91,16 +94,9 @@ function calculateCartTotals() {
          // multiple the percentage of the discount
          promoDiscount = Number(promoDiscount) * subTotal;
       }
-      subTotal = subTotal - Number(promoDiscount);
    } else {
       promoDiscount = 0;
    }
-
-   tax = tax * subTotal;
-   var total = tax + subTotal;
-
-   //alert("tax [" + formatNumber(tax) + "] promoDiscount [" + formatNumber(promoDiscount) + "] subTotal [" +
-   //     formatNumber(subTotal) + "] total [" + formatNumber(total) + "]");
 
    // update fields
    if (promoDiscountName !== null && promoDiscountName !== "") {
@@ -109,7 +105,11 @@ function calculateCartTotals() {
       $("#cart-promo-discount-text").text("Discount");
    }
 
+   var tax = Number(getJsonFromSession(RESTAURANT_SESSION_KEY).taxRate) * (Number(subTotal) - Number(promoDiscount));
+   var total = (Number(subTotal) - Number(promoDiscount)) + tax;
+
    $("#cart-subTotal").text(formatNumber(subTotal));
+   $("#cart-sub-total-and-discount").text(formatNumber(Number(subTotal) - Number(promoDiscount)));
    $("#cart-discount").text(formatNumber(Number(promoDiscount)));
    $("#cart-tax").text(formatNumber(tax));
    $("#cart-total").text(formatNumber(total));

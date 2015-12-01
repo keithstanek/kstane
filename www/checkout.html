@@ -367,6 +367,7 @@
           "email": email,
           "phone": phone,
           "name": name,
+          "notes": cart.notes,
           "deliveryAddress": deliveryAddress,
           "ccSecurityCode": ccSecurityCode,
           "ccExpireMonth": ccExpireMonth,
@@ -404,6 +405,7 @@
              }
              addVarToSession(ORDER_CONFIRMATION_NO_SESSION_KEY, r.response.orderId);
              addVarToSession(ORDER_CONFIRMATION_NAME_SESSION_KEY, name);
+             addVarToSession(ORDER_CONFIRMATION_PAYMENT_TYPE_SESSION_KEY, request.paymentType);
 
              // save the order to history if they wanted
              var saveOrder = $("#txtSaveOrder").val().trim();
@@ -478,6 +480,9 @@
                "<div class=\"item-cell\">" + item.name + buildCondimentList(cart.items[i]) + "</div></div>";
      		$("#order-summary").append(div).trigger("create");
    	}
+      if (cart.notes !== undefined && cart.notes !== "") {
+         $("#order-summary").append("<br>Notes:<br>" + cart.notes).trigger("create");
+      }
       calculateCheckoutTotals();
    }
 
@@ -494,15 +499,23 @@
    	}
 
       var promoDiscount = getVarFromSession(PROMO_DISCOUNT_SESSION_KEY);
-      var discountText = "";
-      if (promoDiscount !== null && promoDiscount !== "") {
-         $("#summary-discount").text(formatNumber(Number(promoDiscount)));
+      var promoDiscountType = getVarFromSession(PROMO_DISCOUNT_TYPE_SESSION_KEY);
+      var promoDiscountName = getVarFromSession(PROMO_DISCOUNT_NAME_SESSION_KEY);
+
+      if (promoDiscountType !== null && promoDiscountType !== "") {
+         if (Number(promoDiscountType) === 2) {
+            // multiple the percentage of the discount
+            promoDiscount = Number(promoDiscount) * Number(subTotal);
+         }
+         promoDiscount = formatNumber(Number(promoDiscount));
+         $("#summary-discount").text(promoDiscount);
       } else {
+         promoDiscount = 0;
          $("#summary-discount").text("0.00");
       }
 
       var orderType = $("#txtOrderType").text();
-      var deliveryFee = 3;
+      var deliveryFee = 0;
       if (orderType == "Delivery") {
          var restaurant = getJsonFromSession(RESTAURANT_SESSION_KEY);
          if (restaurant.deliveryFee !== null && restaurant.deliveryFee !== "" && restaurant.deliveryFee !== undefined){
@@ -514,10 +527,11 @@
          $("#summary-delivery-fee").text("0.00");
       }
 
-      var tax = Number(getJsonFromSession(RESTAURANT_SESSION_KEY).taxRate) * (Number(subTotal) - Number(promoDiscount));
+      subTotal = Number(subTotal) - Number(promoDiscount);
+      var tax = Number(getJsonFromSession(RESTAURANT_SESSION_KEY).taxRate) * subTotal;
+      var total = subTotal + deliveryFee + tax;
 
       $("#summary-tax").text(formatNumber(tax));
-      var total = (subTotal - Number(promoDiscount)) + deliveryFee + tax;
       $("#summary-total").text(formatNumber(total));
       $("#summary-sub-total").text(formatNumber(subTotal));
    }

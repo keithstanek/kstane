@@ -106,6 +106,11 @@
                   $("#change-restaurant-btn").hide();
                }
 
+               var userInfo = getJsonFromSession(USER_SESSION_KEY);
+               if (userInfo.email === "keithstanek@gmail.com" || userInfo.email === "jacobcoffman1992@gmail.com") {
+                  $("#admin-settings").show();
+               }
+
                if (restaurant != null && restaurant != "") {
                   loadInfo();
                   return;
@@ -215,6 +220,9 @@
           </div>
           <div class="col-sm-12" id="change-restaurant-btn">
              <label class="promo-code-btn btn btn-lg btn-primary" onclick="displayRestaurantModal();">Change Restaurant</label>
+          </div>
+          <div class="col-sm-12" id="admin-settings" style="display: none;">
+             <a href="settings.html" class="promo-code-btn btn btn-lg btn-primary">Admin - View App Settings</a>
           </div>
 
           <div id="modal" class="modal fade">

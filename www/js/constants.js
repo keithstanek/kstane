@@ -23,10 +23,12 @@ var ORDER_CONFIRMATION_NO_SESSION_KEY = "ORDER_CONFIRMATION_NO";
 var ORDER_CONFIRMATION_NAME_SESSION_KEY = "ORDER_CONFIRMATION_NAME";
 var PREVIOUS_ORDER_HISTORY = "PREVIOUS_ORDER_HISTORY";
 var RESTAURANT_LIST_SESSION_KEY = "restaurant-list";
+var ORDER_CONFIRMATION_PAYMENT_TYPE_SESSION_KEY = "order-confirmation-payment-type";
+
 
 var FRANCHISE_ID = "1";
 
-var URL_HOST = "http://api.menu-junction.com";
+var URL_HOST = "https://api.menu-junction.com";
 //var URL_HOST = "http://127.0.0.1/~kstane/mobile/rest-api";
 
 var LOGIN_URL = URL_HOST + "/user/index.php/login";

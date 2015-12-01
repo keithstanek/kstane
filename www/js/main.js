@@ -65,11 +65,15 @@ jQuery(function($) {'use strict';
 			loadInfo();
 		}
 
+		if (page === "settings") {
+			loadAdminSettings();
+		}
+
 		if (page === "menu") {
 			loadRestaurantMenu();
 			var storeIsOpen = isStoreOpen();
 			if (!storeIsOpen) {
-				alert("The store is closed!!!!!!!!!")
+				displayStaticModal("closed-modal");
 			}
 		}
 
@@ -242,6 +246,7 @@ function removePromoCode() {
    addVarToSession(PROMO_DISCOUNT_SESSION_KEY, 0);
    window.sessionStorage.removeItem(PROMO_CODE_SESSION_KEY);
    window.sessionStorage.removeItem(PROMO_DISCOUNT_NAME_SESSION_KEY);
+	window.sessionStorage.removeItem(PROMO_DISCOUNT_TYPE_SESSION_KEY);
    calculateCartTotals();
 }
 
@@ -415,7 +420,11 @@ function displayRestaurantModal() {
 			"<p>" + restaurant.address + " " + restaurant.zip + " " + restaurant.phone + "<hr></p></div>";
 		$("#restaurant-modal-body").append(html);
 	}
-	$("#restaurant-list-modal").modal({visibility: 'show', backdrop: 'static', keyboard: false});
+	displayStaticModal("restaurant-list-modal");
+}
+
+function displayStaticModal(name) {
+	$("#" + name).modal({visibility: 'show', backdrop: 'static', keyboard: false});
 }
 
 
