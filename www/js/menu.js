@@ -2,6 +2,7 @@
 
 function loadRestaurantMenu() {
    var categoryList = getJsonFromSession(MENU_SESSION_KEY).categories;
+   var itemDictionary = getJsonFromSession(ITEM_LIST_SESSION_KEY);
 
    for (var i = 0; i < categoryList.length; i++) {
       var category = categoryList[i];
@@ -9,7 +10,7 @@ function loadRestaurantMenu() {
 
       var itemList = category.items;
       for (var itemCounter = 0; itemCounter < itemList.length; itemCounter++) {
-         var item = itemList[itemCounter];
+         var item = JSON.parse(itemDictionary[itemList[itemCounter].id]);
          // add a collapsable row before we append the item
          //alert("id [" + item.id + "] name [" + item.name + "] category id [" + category.id + "] price [" + item.price + "]")
          addItemToCategory("item_" +item.id, item.name, "category_" + category.id + "_accordion", item.price);

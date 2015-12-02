@@ -122,6 +122,7 @@
                }
                if (restaurantList.length == 1) {
                   addJsonToSession(RESTAURANT_SESSION_KEY, restaurantList[0]);
+                  calculatePrices();
                }
 
                loadInfo();

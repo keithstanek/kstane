@@ -397,6 +397,42 @@ function getRestaurantInfo() {
    });
 }
 
+function calculatePrices() {
+	var restaurant = getJsonFromSession(RESTAURANT_SESSION_KEY);
+
+	if (restaurant.priceIncrease == undefined || restaurant.priceIncrease == null || restaurant.priceIncrease == "") {
+		return;
+	}
+
+	var percent = 1 + (.01 * Number(restaurant.priceIncrease));
+
+	var condiments = getJsonFromSession(CONDIMENT_LIST_SESSION_KEY);
+	for (var x = 0; x < condiments.length; x++) {
+		var c = condiments[x];
+		if (c == null) {
+			continue;
+		}
+		if (c.price > 0) {
+			c.price = c.price * percent;
+		}
+		condimentDictionary[c.id] = c;
+	}
+	addJsonToSession(CONDIMENT_LIST_SESSION_KEY, condimentDictionary);
+
+	var itemList = getJsonFromSession(ITEM_LIST_SESSION_KEY);
+	var dictionary = [];
+	for (var i = 0; i < itemList.length; i++) {
+		var item = JSON.parse(itemList[i]);
+
+		if (item == null) {
+			continue;
+		}
+		item.price = Number(item.price) * percent;
+		dictionary[item.id] = JSON.stringify(item);
+	}
+	addJsonToSession(ITEM_LIST_SESSION_KEY, dictionary);
+}
+
 function pickRestaurant(id) {
 	 $("#restaurant-list-modal").modal('hide');
 	 var restaurantList = getJsonFromSession(RESTAURANT_LIST_SESSION_KEY);
