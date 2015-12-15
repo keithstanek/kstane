@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.jandkmediasolutions.mobile.whatta-burger" version="1.0.101" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+<widget id="com.jandkmediasolutions.mobile.whatta-burger" version="1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
     <name>Whatta-Burger</name>
     <description>The official app for Feltner's Whatta-Burger of Russellville, Arkansas</description>
     <author email="support@jandkmediasolutions.com" href="http://www.jandkmediasolutions.com/support.html">J&amp;K Media Solutions Support</author>
