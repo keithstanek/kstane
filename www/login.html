@@ -78,6 +78,14 @@
       $("#loginForm").show();
    }
 
+   function loginGuest() {
+      var u = {
+        "username": "GUEST"
+ 		}
+      window.sessionStorage.setItem("user", JSON.stringify(u));
+      window.location.href = "home.html";
+   }
+
    function login() {
       var email = $("#txtLoginEmail").val();
       var password = $("#txtLoginPassword").val();
@@ -148,6 +156,7 @@
       $("#btnLogin").show();
       $("#topDiv").show();
       $("#btnLogin-Register").show();
+      $("#btnAsGuest").show();
    }
 
    function displayModal(title, body) {
@@ -314,6 +323,7 @@
                      <button type="button" id="btn-reset-password" onclick="showResetPasswordModal();" class="btn btn-primary btn-block">Reset Password</button>
                      <button type="button" id="btnLogin-Register" onclick="showRegistrationView();" class="btn btn-success btn-block">Register Now</button>
                      <button type="button" id="btnLogout" onclick="logout(); return false;" class="btn btn-danger btn-block" style="display: none;">Logout</button>
+                     <button type="button" id="btnAsGuest" onclick="loginGuest(); return false;" class="btn btn-success btn-block">Continue As Guest</button>
                </p>
             </div>
             <div class="form-group">

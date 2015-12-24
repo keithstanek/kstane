@@ -110,13 +110,20 @@
                 <div class="view-cart-spacer">&nbsp;</div>
                 <div class="view-cart-total">Sub-Total:&nbsp;&nbsp;$<span id="cart-subTotal">0.00</span></div>
                 <div class="view-cart-spacer">&nbsp;</div>
-                <div class="view-cart-total"><span id="cart-promo-discount-text">Discount</span>:&nbsp;&nbsp;$<span style="color: red;" id="cart-discount">0.00</span></div>
-                <div class="view-cart-spacer">&nbsp;</div>
-                <div class="view-cart-total"><span>New Sub-Total</span>:&nbsp;&nbsp;$<span id="cart-sub-total-and-discount">0.00</span></div>
-                <div class="view-cart-spacer">&nbsp;</div>
+                <div id="cart-discount-view" style="display: none;">
+                   <div class="view-cart-total"><span id="cart-promo-discount-text">Discount</span>:&nbsp;&nbsp;$<span style="color: red;" id="cart-discount">0.00</span></div>
+                   <div class="view-cart-spacer">&nbsp;</div>
+                   <div class="view-cart-total"><span>New Sub-Total</span>:&nbsp;&nbsp;$<span id="cart-sub-total-and-discount">0.00</span></div>
+                   <div class="view-cart-spacer">&nbsp;</div>
+                </div>
                 <div class="view-cart-total">Tax:&nbsp;&nbsp;$<span id="cart-tax">0.00</span></div>
                 <div class="view-cart-spacer">&nbsp;</div>
+                <div id="order-charge-display" style="display: none;">
+                   <div class="view-cart-total">Web Order Fee:&nbsp;&nbsp;$<span id="order-charge">0.00</span></div>
+                   <div class="view-cart-spacer">&nbsp;</div>
+                </div>
                 <div class="view-cart-total">Total:&nbsp;&nbsp;$<span id="cart-total">0.00</span></div>
+                <div class="view-cart-spacer">&nbsp;</div>
              </div>
              <br>
              <div class="col-sm-6 col-xs-12" id="add-promo-code-div">
@@ -126,7 +133,7 @@
                 <a href="" class="promo-code-btn btn btn-primary" onclick="removePromoCode(); return false;">Remove Promo Code</a>
              </div>
              <div class="col-sm-6 col-xs-12">
-                <a href="checkout.html" class="btn btn btn-success btn-block">Checkout</a>
+                <a href="checkout.html" id="btnCheckout" class="btn btn btn-success btn-block"><i class="fa fa-lock"></i>&nbsp;&nbsp;Checkout</a>
              </div>
              <div class="col-sm-6 col-xs-12">
                 <a href="menu.html" style="display: block; margin-top: 4px;" class="btn btn btn-success">Continue Shopping</a>

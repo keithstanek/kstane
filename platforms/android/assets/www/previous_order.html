@@ -81,6 +81,13 @@
     }
 
     function loadPreviousOrders() {
+      var user = getJsonFromSession(USER_SESSION_KEY);
+      if (user.username == "GUEST") {
+         $("#historyTable").hide();
+         $("#po-view-guest").show();
+         return;
+      }
+
       var orderHistory = JSON.parse(window.localStorage.getItem(PREVIOUS_ORDER_HISTORY));
       if (orderHistory === null || orderHistory === undefined) {
         return;
@@ -188,6 +195,11 @@
     <script type="text/javascript" src="js/constants.js"></script>
     <script src="js/menu.js"> </script>
     <section id="services">
+        <div id="po-view-guest" class="container" style="display: none; margin-top: -70px;">
+           <h2 class="page-header">Order History</h2>
+           <p>You are logged in as a guest.</p>
+           <p>If you would like to store your order history for easy ordering in the future, please register and log in.</p>
+        </div>
         <div id="historyTable" class="container" style="margin-top: -70px;">
            <h2 class="page-header">Order History</h2>
         </div>

@@ -105,14 +105,14 @@
                               <tr>
                                  <td class="cell-one">Tax Due:&nbsp;</td>
                                  <td class="cell-two">$<span id="summary-tax">0.00</span></td>
-                                 <td class="cell-one"><span id="delivery-payment-info">Delivery:&nbsp;</span></td>
-                                 <td class="cell-two"><span id="delivery-payment-amount">$<span id="summary-delivery-fee">0.00</span></span></td>
+                                 <td class="cell-one"><span id="order-charge-display">Order Fee:&nbsp;</span></td>
+                                 <td class="cell-two"><span id="order-charge-amount">$<span id="order-charge">0.00</span</span></td>
                               </tr>
                               <tr>
                                  <td class="cell-one"><b>Amount Due:&nbsp;</b></td>
                                  <td class="cell-two"><b>$<span id="summary-total">0.00</span></b></td>
-                                 <td>&nbsp;</td>
-                                 <td>&nbsp;</td>
+                                 <td class="cell-one"><span id="delivery-payment-info">Delivery:&nbsp;</span></td>
+                                 <td class="cell-two"><span id="delivery-payment-amount">$<span id="summary-delivery-fee">0.00</span></span></td>
                               </tr>
                            </table>
                         </p>
@@ -221,7 +221,7 @@
                  <div class="text-center">
                      <p class="col-md-6 col-sm-12">
                         <a href="" onclick="submitOrder();return false;" style="display: block;" class="btn btn-lg btn-primary">
-                           <i class="fa fa-lock"></i>&nbsp;&nbsp;&nbsp;Place Secure Order
+                           <i class="fa fa-lock"></i>&nbsp;&nbsp;Place Secure Order
                         </a>
                      </p>
                      <p class="col-md-6 col-sm-12">
@@ -311,6 +311,10 @@
 
    function fillInForm() {
       var user = getJsonFromSession(USER_SESSION_KEY);
+      if (user.username == "GUEST") {
+         $("#saveOrder").hide();
+         return;
+      }
       $("#email").val(user.email);
       $("#name").val(user.firstName + " " + user.lastName);
       $("#phone").val(user.phone);
@@ -337,10 +341,10 @@
    }
 
    function submitOrder() {
-      if (isStoreClosed()) {
-         displayModal("The restaurant is closed. It will open at " + getOpenTime() + " AM. You can re-sumbit your order then.")
-         return;
-      }
+      // if (isStoreClosed()) {
+      //    displayModal("The restaurant is closed. It will open at " + getOpenTime() + " AM. You can re-sumbit your order then.")
+      //    return;
+      // }
 
       // reset the counter and array
       errorFieldsCounter = 0;
@@ -460,6 +464,7 @@
          $("#delivery-payment-info").hide();
          $("#delivery-payment-amount").hide();
       }
+
       $("#div-delivery-address").hide();
       $("#modal-1").modal({
          visibility: 'show',
@@ -474,6 +479,7 @@
       if (orderType === "Delivery") {
          $("#div-delivery-address").toggle();
       }
+
       $("#txtOrderType").text(orderType);
       calculateCheckoutTotals();
       var restaurantList = getJsonFromSession(RESTAURANT_LIST_SESSION_KEY);
@@ -556,9 +562,19 @@
       }
 
       subTotal = Number(subTotal) - Number(promoDiscount);
+
+      var orderCharge = getJsonFromSession(RESTAURANT_SESSION_KEY).orderCharge;
+      if ( Number(orderCharge) > 0 ) {
+         $("#order-charge-display").show();
+         $("#order-charge-amount").show();
+         $("#order-charge").text(formatNumber(Number(orderCharge)));
+      } else {
+         $("#order-charge-display").hide();
+         $("#order-charge-amount").hide();
+      }
       if (subTotal > 0) {
          var tax = Number(getJsonFromSession(RESTAURANT_SESSION_KEY).taxRate) * subTotal;
-         var total = subTotal + deliveryFee + tax;
+         var total = subTotal + deliveryFee + tax + Number(orderCharge);
 
          $("#summary-tax").text(formatNumber(tax));
          $("#summary-total").text(formatNumber(total));

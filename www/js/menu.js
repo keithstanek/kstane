@@ -13,6 +13,9 @@ function loadRestaurantMenu() {
          var item = JSON.parse(itemDictionary[itemList[itemCounter].id]);
          // add a collapsable row before we append the item
          //alert("id [" + item.id + "] name [" + item.name + "] category id [" + category.id + "] price [" + item.price + "]")
+         if (item.isVisible == "false") {
+            continue;
+         }
          addItemToCategory("item_" +item.id, item.name, "category_" + category.id + "_accordion", item.price, "&nbsp;&nbsp;" + item.description);
 
          // now that we have the item added to the category, lets add the condiments and add to cart button

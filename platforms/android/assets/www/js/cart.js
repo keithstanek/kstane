@@ -1,8 +1,23 @@
+function getItemCount(cart) {
+   var itemCount = 0;
+   for (var i =0; i < cart.items.length; i++) {
+		if (cart.items[i] === null) {
+         continue;
+      }
+      itemCount++;
+   }
+
+   return itemCount;
+}
+
 function loadCartView() {
 	// retrieve the items from the context
 
    var cart = getJsonFromSession(CART_SESSION_KEY);
-   if (cart === null) {
+   if (cart === null || getItemCount(cart) < 0) {
+      $("#remove-promo-code-div").hide();
+      $("#btnCheckout").hide();
+      $("#add-promo-code-div").hide();
       return; // there are no items in the cart
    }
 
@@ -10,8 +25,8 @@ function loadCartView() {
       $("#order-notes").val(cart.notes);
    }
 
-   var promoDiscountName = getVarFromSession(PROMO_DISCOUNT_NAME_SESSION_KEY)
-   if (promoDiscountName != undefined && promoDiscountName != "") {
+   var promoDiscountName = getVarFromSession(PROMO_DISCOUNT_NAME_SESSION_KEY);
+   if (promoDiscountName != undefined && promoDiscountName != null && promoDiscountName != "") {
       $("#add-promo-code-div").hide();
    } else {
       $("#remove-promo-code-div").hide();
@@ -100,7 +115,7 @@ function calculateCartTotals() {
    if (promoDiscountType !== null && promoDiscountType !== "") {
       if (Number(promoDiscountType) === 2) {
          // multiple the percentage of the discount
-         promoDiscount = Number(promoDiscount) * subTotal;
+         promoDiscount = formatNumber(Number(promoDiscount) * subTotal);
       }
    } else {
       promoDiscount = 0;
@@ -109,15 +124,23 @@ function calculateCartTotals() {
    // update fields
    if (promoDiscountName !== null && promoDiscountName !== "") {
       $("#cart-promo-discount-text").text("Discount (" + promoDiscountName + ") ");
+      $("#cart-discount-view").show();
    } else {
       $("#cart-promo-discount-text").text("Discount");
+      $("#cart-discount-view").hide();
+   }
+
+   var orderCharge = getJsonFromSession(RESTAURANT_SESSION_KEY).orderCharge;
+   if ( Number(orderCharge) > 0 ) {
+      $("#order-charge-display").show();
+      $("#order-charge").text(formatNumber(Number(orderCharge)));
    }
 
    $("#cart-discount").text(formatNumber(Number(promoDiscount)));
    $("#cart-subTotal").text(formatNumber(subTotal));
    if (Number(subTotal) - Number(promoDiscount) > 0) {
       var tax = Number(getJsonFromSession(RESTAURANT_SESSION_KEY).taxRate) * (Number(subTotal) - Number(promoDiscount));
-      var total = (Number(subTotal) - Number(promoDiscount)) + tax;
+      var total = (Number(subTotal) - Number(promoDiscount)) + tax + Number(orderCharge);
       $("#cart-sub-total-and-discount").text(formatNumber(Number(subTotal) - Number(promoDiscount)));
       $("#cart-tax").text(formatNumber(tax));
       $("#cart-total").text(formatNumber(total));

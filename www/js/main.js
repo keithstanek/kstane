@@ -41,16 +41,18 @@ jQuery(function($) {'use strict';
 			window.location.href="login.html";
 		}
 
-		if (userLoggedIn &&  page === "login") {
+		if (userLoggedIn &&  page === "login" && getJsonFromSession(USER_SESSION_KEY).username != "GUEST") {
 			$("#btnLogin").hide();
 			$("#btn-reset-password").hide();
 			$("#topDiv").hide();
 			$("#btnLogin-Register").hide();
 			$("#btnLogout").show();
+			$("#btnAsGuest").hide();
 		}
 
 		if (!userLoggedIn &&  page === "login") {
 			$("#btnLogout").hide();
+			// $("#btnAsGuest").show();
 		}
 
 		if (page === "previous_order") {

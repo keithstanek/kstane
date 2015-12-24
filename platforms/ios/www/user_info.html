@@ -86,6 +86,11 @@
                  return;
               }
 
+              if (user.username == "GUEST") {
+                 $("#user-info-view").hide();
+                 $("#user-info-view-guest").show();
+              }
+
               $("#phone").val(user.phone);
               $("#first-name").val(user.firstName);
               $("#last-name").val(user.lastName);
@@ -218,6 +223,7 @@
            </script>
            <h2 class="page-header">User Information</h2>
            <!-- <div class="col-sm-12"><img class="img-responsive img-rounded img-thumbnail" src="images/hamburger.jpg"></div> -->
+           <div id="user-info-view">
            <div class="row home-margin" >
               <div class="col-xs-12 col-med-6">
                    <p><b>Change Password</b></p>
@@ -250,6 +256,11 @@
                    </div>
                 </p>
              </div>
+          </div>
+          </div>
+          <div id="user-info-view-guest">
+             <p>Your are logged in as a guest. There isn't any information to update.</p>
+             <p>If you want to update your information, please log in.</p>
           </div>
           <div id="modal" class="modal fade">
              <div class="modal-dialog">
