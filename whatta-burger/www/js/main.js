@@ -2,15 +2,7 @@
 var condimentDictionary = [];
 var itemDictionary = [];
 
-var categoryPanelBgColor = "fff"; //"fcf8e3";
-var categoryHeaderBgColor = "337ab7";
-var categoryHeaderFontColor = "ffffff";
-var itemPanelBgColor = "F3F3F3";
-var itemHeaderBgColor = "E0A249"; //"00aeef";
-var itemHeaderFontColor = "fff";
 
-var addToCartBtnBgColor = "fcf8e3";
-var addToCartBtnFontColor = "ffffff";
 
 jQuery(function($) {'use strict';
 
@@ -29,6 +21,7 @@ jQuery(function($) {'use strict';
 
 		// on initial load, go get the infomration
 		if (page === "index") {
+			$("#restaurant-name").html(indexHtmlRestaurantName);
 			getRestaurantInfo();
 			return;
 		}
