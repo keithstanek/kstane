@@ -13,4 +13,4 @@ var addToCartBtnFontColor = "ffffff";
 var FRANCHISE_ID = "1";
 
 // The restaurant Name - to be used on index.html
-indexHtmlRestaurantName = "Feltner's Whatta-Burger";
+indexHtmlRestaurantName = "Feltner's Whatta-Burger"; 
