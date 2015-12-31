@@ -26,6 +26,22 @@ jQuery(function($) {'use strict';
 			return;
 		}
 
+		if (page === "intro") {
+			var swiper = new Swiper('.swiper-container', {
+	          pagination: '.swiper-pagination',
+	          paginationClickable: true,
+	          nextButton: '.swiper-button-next',
+	          prevButton: '.swiper-button-prev',
+	          spaceBetween: 30
+	      });
+			return;
+		}
+
+		if (firstTimeUser()) {
+			window.location.href="intro.html";
+			return;
+		}
+
 		addVarToSession(CURRENT_PAGE_SESSION_KEY, page); // for redirect on resume of app -- after the above check
 
 		// first check to make sure they are logged in, either as a person or guest
@@ -92,6 +108,14 @@ jQuery(function($) {'use strict';
 		}
 	});
 });
+
+function firstTimeUser() {
+	var ftu = JSON.parse(window.localStorage.getItem(FIRST_TIME_USER));
+	if (ftu !== null) {
+		return false;
+	}
+	return true;
+}
 
 function loggedIn() {
 	var userInfo = getJsonFromSession(USER_SESSION_KEY);
