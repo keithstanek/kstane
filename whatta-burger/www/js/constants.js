@@ -1,6 +1,9 @@
 // global variables
 var condimentDictionary = [];
 
+// This is used to identify whether they need to upgrade the UI or not. Old versions will not be able to continue
+var APPLICATION_VERSION_NUMBER = 1.04;
+
 var PROMO_CODE_SESSION_KEY = "PROMO_CODE";
 var RESTAURANT_SESSION_KEY = "RESTAURANT";
 var MENU_SESSION_KEY = "MENU";

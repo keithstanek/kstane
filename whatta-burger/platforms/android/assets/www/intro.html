@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Swiper demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+
+    <!-- Link Swiper's CSS -->
+    <link rel="stylesheet" href="css/swiper.min.css">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/lightbox.css" rel="stylesheet">
+	<link href="css/main.css" rel="stylesheet">
+	<link href="css/responsive.css" rel="stylesheet">
+
+    <!-- Demo styles -->
+    <style>
+    html, body {
+        position: relative;
+        height: 100%;
+    }
+    body {
+        background: #eee;
+        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        color:#000;
+        margin: 0;
+        padding: 0;
+    }
+    .swiper-container {
+        width: 100%;
+        height: 100%;
+    }
+    .swiper-slide {
+        text-align: center;
+        font-size: 14px;
+        background: #fff;
+        padding: 15px;
+
+        /* Center slide text vertically */
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+        border: 1px #000 solid;
+    }
+    .paragraph-contents {
+       position: relative;
+       text-align: left;
+       margin-left: 30px;
+       margin-right: 25px;
+    }
+    .top-header {
+       #margin-top: 30px;
+       text-align: center;
+    }
+    .my-slider {
+       width: 100%;
+       height: 100%;
+    }
+    </style>
+</head>
+<body>
+    <script type="text/javascript" src="custom/custom.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="js/constants.js"></script>
+    <script src="js/menu.js"> </script>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="js/swiper.min.js"></script>
+
+    <script type="text/javascript">
+       app.initialize();
+       var page = "intro";
+    </script>
+
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+           <div class="swiper-slide">
+             <div class="my-slider">
+                 <p class="top-header"><h2 class="page-header">Register or Continue As Guest</h2></p>
+                 <p class="paragraph-contents">
+                    The first interactive page you encounter will require you to "Login" (discussed in an upcoming slide),
+                    "Register" or "Continue as Guest". The preferred option is to register since there is added benefits.
+                    Plus, by registering, your login information can be used by all the mobile applications
+                    created by J&K Media Solutions.
+                 </p>
+                 <p class="paragraph-contents">
+                    To "Register" or "Continue As Guest", look for the green buttons below on the Login page.
+                 </p>
+                 <p class="paragraph-contents">
+                    <img class="img-responsive img-rounded img-thumbnail" src="img/intro-register-continue.png">
+                 </p>
+             </div>
+           </div>
+           <div class="swiper-slide">
+             <div class="my-slider">
+                 <p class="top-header"><h2 class="page-header">Registration</h2></p>
+                 <p class="paragraph-contents">
+                    To register, fill out the required information and click the green "Register" button.
+                    You will get prompted if a field isn't filled out correctly.
+                 </p>
+                 <p class="paragraph-contents">
+                    <img class="img-responsive img-rounded img-thumbnail" src="img/intro-register.png">
+                 </p>
+             </div>
+           </div>
+            <div class="swiper-slide">
+               <div class="my-slider">
+                  <p class="top-header"><h2 class="page-header">Login</h2></p>
+                  <p class="paragraph-contents">
+                     After you have registered, you will be prompted to "Login".
+                  </p>
+                  <p class="paragraph-contents">
+                     To login, fill out the email address and
+                     password you used to register, then click the blue "Login" button.
+                  </p>
+                  <p class="paragraph-contents">
+                     If you check the "Remember Me" checkbox you will not be prompted to login when open
+                     the app, unless you either logout or reinstall the app.
+                  </p>
+                  <br>
+                  <p class="paragraph-contents">
+                     <img class="img-responsive img-rounded img-thumbnail" src="img/intro-login.png">
+                  </p>
+               </div>
+            </div>
+            <div class="swiper-slide">
+               <div class="my-slider">
+                  <p class="top-header"><h2 class="page-header">Reset Password</h2></p>
+                  <p class="paragraph-contents">
+                     If you forgot your password, don't worry, just look for the blue "Reset Password" button on the Login page.
+                  </p>
+                  <p class="paragraph-contents">
+                     Once clicked, you will be prompted to enter your registered email address. An email will get sent
+                     with a new password. We can't retreive and send you the lost password since all stored
+                     passwords are encrypted.
+                  </p>
+                  <p class="paragraph-contents">
+                     <img class="img-responsive img-rounded img-thumbnail" src="img/intro-reset-password.png">
+                  </p>
+               </div>
+            </div>
+            <div class="swiper-slide">
+               <div class="my-slider">
+                  <p class="top-header"><h2 class="page-header">Navigation</h2></p>
+                  <p class="paragraph-contents">
+                     To navigate to differt parts of the app, use the <img style="height: 25px; width: 25px;" src="img/intro-navigation-icon.png"> icon
+                     in the upper right corner of the app. Once clicked, a menu will drop down with a list of pages to visit.
+                  </p>
+                  <br>
+                  <p class="paragraph-contents">
+                     <img class="img-responsive img-rounded img-thumbnail" src="img/intro-navigation.png">
+                  </p>
+               </div>
+            </div>
+            <div class="swiper-slide">
+               <div class="my-slider">
+                  <p class="top-header"><h2 class="page-header">User Settings</h2></p>
+                  <p class="paragraph-contents">
+                     To view your user settings, click the navigation icon in the upper right corner of the app, then choose
+                     "Settings". From this page you can either change your password or
+                     personal information. Fill out the text and hit the update button.
+                  </p>
+                  <p class="paragraph-contents">
+                     <img class="img-responsive img-rounded img-thumbnail" src="img/intro-user-settings.png">
+                  </p>
+               </div>
+            </div>
+            <div class="swiper-slide">
+               <div class="my-slider">
+                  <p class="top-header"><h2 class="page-header">Home</h2></p>
+                  <p class="paragraph-contents">
+                     The "Home" screen is where you will find out the information about your restaurant hours and location.
+                     You will be able to start shopping by clicking the "Order Online" button. You can even call
+                     the restaurant by clicking the green button with their phone number on it. You will be able to access
+                     your "Previous Orders" so you can quickly order your food.
+                  </p><br>
+                  <p class="paragraph-contents">
+                     <img class="img-responsive img-rounded img-thumbnail" src="img/intro-home.png">
+                  </p>
+               </div>
+            </div>
+            <div class="swiper-slide">
+               <div class="my-slider">
+                  <p class="top-header"><h2 class="page-header">Ordering - Categories</h2></p>
+                  <p class="paragraph-contents">
+                     You can view the menu by touching the "Order Online" button from the "Home" screen, or you can use the
+                     navigation icon in the upper right corner and selecting "Menu". Once on the menu, you can choose the category
+                     of food you would like, by clicking it. Once clicked, the category will expand to list all the available items
+                     for that category.
+                  </p><br>
+                  <p class="paragraph-contents">
+                     <img class="img-responsive img-rounded img-thumbnail" src="img/intro-category-list.png">
+                  </p>
+               </div>
+            </div>
+            <div class="swiper-slide">
+               <div class="my-slider">
+                  <p class="top-header"><h2 class="page-header">Ordering - Items</h2></p>
+                  <p class="paragraph-contents">
+                     Once you have found the item you want, click the heading to expand all the available condiments.
+                     If this item is a "combo" meal, you will be prompted to select the appropriate meal options.
+                  </p><br>
+                  <p class="paragraph-contents">
+                     <img class="img-responsive img-rounded img-thumbnail" src="img/intro-item.png">
+                  </p>
+               </div>
+            </div>
+            <div class="swiper-slide">
+               <div class="my-slider">
+                  <p class="top-header"><h2 class="page-header">Ordering - Add To Cart</h2></p>
+                  <p class="paragraph-contents">
+                     Once you have added all the condiments or meal options for your item, you can adjust the quantity that you want
+                     by clicking the "+" (blue) and "-" (red) buttons. When you have the desired quantity, click the green "Add To Cart"
+                     button. Once clicked your item will be placed in the cart and await checkout.
+                  </p><br>
+                  <p class="paragraph-contents">
+                     <img class="img-responsive img-rounded img-thumbnail" src="img/intro-item.png">
+                  </p>
+               </div>
+            </div>
+            <div class="swiper-slide">
+               <div class="my-slider">
+                  <p class="top-header"><h2 class="page-header">Ordering - View Cart</h2></p>
+                  <p class="paragraph-contents">
+                     You can view the cart at anytime during your order by clicking on the cart idon in the upper left of the
+                     application. The cart icon in the upper left, displays the price and number of items you have in your cart.
+                     When clicking the icon, the cart detail page will be displayed. This page will show your your order total,
+                     allow you to remove items, and allow you to update quantities of items. You can also add special notes for
+                     your order.
+                  </p><br>
+                  <p class="paragraph-contents">
+                     <img class="img-responsive img-rounded img-thumbnail" src="img/intro-view-cart.png">
+                  </p>
+               </div>
+            </div>
+            <div class="swiper-slide">
+               <div class="my-slider">
+                  <p class="top-header"><h2 class="page-header">Ordering - Checkout</h2></p>
+                  <p class="paragraph-contents">
+                     After you have added all your items, from the "View Cart" screen, choose the green "Checkout" button.
+                     You will then be prompted to choose if you want to "Dine In", "Pick Up", or "Delivery"
+                     (subject to restaurant availability). Next, review your order to make sure it is correct. Then choose your payment
+                     method of at the store or through the app with your credit/debit card.
+                  </p><br>
+                  <p class="paragraph-contents">
+                     <img class="img-responsive img-rounded img-thumbnail" src="img/intro-ordering-1.png">
+                  </p>
+               </div>
+            </div>
+            <div class="swiper-slide">
+               <div class="my-slider">
+                  <p class="top-header"><h2 class="page-header">Ordering - Checkout cont'd</h2></p>
+                  <p class="paragraph-contents">
+                     Check your contact information to make sure it is correct. If you will be using this order often,
+                     make sure to give it a name so you can re-order these items with the click of a button. Once satisfied
+                     that your information is correct and you have entered an order name, click the blue "Place Secure Order"
+                     button to submit your order to the restaurant and await for the confirmation page.
+                  </p><br>
+                  <p class="paragraph-contents">
+                     <img class="img-responsive img-rounded img-thumbnail" src="img/intro-ordering-2.png">
+                  </p>
+               </div>
+            </div>
+            <div class="swiper-slide">
+               <div class="my-slider">
+                  <p class="top-header"><h2 class="page-header">Previous Orders</h2></p>
+                  <p class="paragraph-contents">
+                     If you gave your orders a name at checkout, you can view them pretty easily. From the "Home" screen,
+                     click the blue "Previous Orders" button, or from the navigation icon in the upper right corner,
+                     choose "Previous Orders". If you have orders saved, you can easily click the green "Checkout" button
+                     to take you to the check out screen. Review your order details and contact information, and you are
+                     ready to check out.
+                  </p><br>
+                  <p class="paragraph-contents">
+                     <img class="img-responsive img-rounded img-thumbnail" src="img/intro-previous-orders.png">
+                  </p>
+               </div>
+            </div>
+            <div class="swiper-slide">
+               <div class="my-slider">
+                  <p class="top-header"><h2 class="page-header">Complete</h2></p>
+                  <p class="paragraph-contents">
+                     You are not ready to browse and enjoy the service your restaurant has provided for you. If you have any
+                     questions, you can contact J&K Media Solutions at support@jandkmediasolutions.com at anytime.
+                  </p>
+                  <p class="paragraph-contents">
+                     You can view this tutorial again at anytime by clicking the blue "Tutorial" button from the "Home" screen.
+                  </p>
+                  <p style="text-align: center;">
+                     <span onclick="tutorialComplete();" class="btn btn-success">Tutorial Complete</span>
+                  </p>
+               </div>
+            </div>
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+        <!-- Add Arrows -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+    <script>
+    function tutorialComplete() {
+       var ftu = {
+          "tutorialComplete": true
+       };
+       window.localStorage.setItem(FIRST_TIME_USER, JSON.stringify(ftu));
+       window.location.href="home.html";
+    }
+    </script>
+</body>
+</html>
