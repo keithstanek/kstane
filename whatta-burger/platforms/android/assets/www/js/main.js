@@ -39,6 +39,7 @@ jQuery(function($) {'use strict';
 	          prevButton: '.swiper-button-prev',
 	          spaceBetween: 30
 	      });
+			$("#restaurant-name").html(indexHtmlRestaurantName);
 			return;
 		}
 
@@ -434,9 +435,10 @@ function getRestaurantInfo() {
 
 			// first check the version number to see if they need to update, if so, send them
 			// to the update pago to notify the user
+			// KAS - Comment out for now since I can't figure out the  update button and we need to get the app out there
 			if (APPLICATION_VERSION_NUMBER < Number(response.versionNo)) {
-				window.location.href = "upgrade.html";
-				return;
+				//window.location.href = "upgrade.html";
+				//return;
 			}
 
 			var redirectPage = getVarFromSession(CURRENT_PAGE_SESSION_KEY);

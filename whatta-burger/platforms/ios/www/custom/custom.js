@@ -12,5 +12,8 @@ var addToCartBtnFontColor = "ffffff";
 // The franchise ID of the App
 var FRANCHISE_ID = "1";
 
+// The URL's to update the application
+var iOSUpdateLink = "itms-apps://itunes.apple.com/us/app/whatta-burger/id1067064509?mt=8";
+
 // The restaurant Name - to be used on index.html
-indexHtmlRestaurantName = "Feltner's Whatta-Burger"; 
+indexHtmlRestaurantName = "Feltner's Whatta-Burger";

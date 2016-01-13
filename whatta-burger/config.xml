@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.jandkmediasolutions.mobile.whatta-burger" version="1.04"
+<widget id="com.jandkmediasolutions.mobile.whatta-burger" version="1.07"
    xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0"
-   android-versionCode="108000" ios-CFBundleVersion="108">
+   android-versionCode="112000" ios-CFBundleVersion="112">
     <name>Whatta-Burger</name>
     <description>The official app for Feltner's Whatta-Burger of Russellville, Arkansas</description>
     <author email="support@jandkmediasolutions.com" href="http://www.jandkmediasolutions.com/support.html">J&amp;K Media Solutions Support</author>
