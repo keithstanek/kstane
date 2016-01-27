@@ -1,12 +1,8 @@
 // global variables
 var condimentDictionary = [];
 
-var categoryPanelBgColor = "fcf8e3";
-var categoryHeaderBgColor = "337ab7";
-var categoryHeaderFontColor = "ffffff";
-var itemPanelBgColor = "fff";
-var itemHeaderBgColor = "79A7CD"; //"00aeef";
-var itemHeaderFontColor = "fff";
+// This is used to identify whether they need to upgrade the UI or not. Old versions will not be able to continue
+var APPLICATION_VERSION_NUMBER = 1.04;
 
 var PROMO_CODE_SESSION_KEY = "PROMO_CODE";
 var RESTAURANT_SESSION_KEY = "RESTAURANT";
@@ -24,9 +20,7 @@ var ORDER_CONFIRMATION_NAME_SESSION_KEY = "ORDER_CONFIRMATION_NAME";
 var PREVIOUS_ORDER_HISTORY = "PREVIOUS_ORDER_HISTORY";
 var RESTAURANT_LIST_SESSION_KEY = "restaurant-list";
 var ORDER_CONFIRMATION_PAYMENT_TYPE_SESSION_KEY = "order-confirmation-payment-type";
-
-
-var FRANCHISE_ID = "2";
+var FIRST_TIME_USER = "first-time-user";
 
 var URL_HOST = "https://api.menu-junction.com";
 //var URL_HOST = "http://127.0.0.1/~kstane/mobile/rest-api";

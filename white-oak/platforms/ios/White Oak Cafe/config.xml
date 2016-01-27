@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="100010" id="com.jandkmediasolutions.restaurants.white-oak-cafe" ios-CFBundleVersion="106" version="1.01" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+<widget android-versionCode="112000" id="com.jandkmediasolutions.mobile.whiteoakcafe" ios-CFBundleVersion="112" version="1.07" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
     <preference name="AllowInlineMediaPlayback" value="false" />
     <preference name="BackupWebStorage" value="cloud" />
     <preference name="DisallowOverscroll" value="false" />
@@ -24,6 +24,7 @@
     <icon height="100" src="resources/ios/icon/icon-50@2x.png" width="100" />
     <icon height="60" src="resources/ios/icon/icon-60.png" width="60" />
     <icon height="120" src="resources/ios/icon/icon-60@2x.png" width="120" />
+    <icon height="152" src="resources/ios/icon/icon-152.png" width="152" />
     <icon height="72" src="resources/ios/icon/icon-72.png" width="72" />
     <icon height="76" src="resources/ios/icon/icon-76.png" width="76" />
     <icon height="29" src="resources/ios/icon/icon-small.png" width="29" />
@@ -69,7 +70,7 @@
     <gap:plugin name="org.apache.cordova.splashscreen" />
     <gap:plugin name="org.apache.cordova.vibration" />
     <gap:plugin name="cordova-plugin-whitelist" source="npm" />
-    <icon src="resources/ios/icon/icon-small@3x.png" />
+    <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <gap:splash src="resources/splash.png" />
     <access origin="*" />
     <allow-navigation href="*menu-junction.com*" />

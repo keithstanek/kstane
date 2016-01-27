@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="100010" id="com.jandkmediasolutions.restaurants.white-oak-cafe" ios-CFBundleVersion="106" version="1.01" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+<widget android-versionCode="112000" id="com.jandkmediasolutions.mobile.whiteoakcafe" ios-CFBundleVersion="112" version="1.07" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
     <preference name="loglevel" value="DEBUG" />
     <feature name="Whitelist">
         <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
@@ -54,7 +54,7 @@
     <gap:plugin name="org.apache.cordova.splashscreen" />
     <gap:plugin name="org.apache.cordova.vibration" />
     <gap:plugin name="cordova-plugin-whitelist" source="npm" />
-    <icon src="resources/ios/icon/icon-small@3x.png" />
+    <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <gap:splash src="resources/splash.png" />
     <access origin="*" />
     <allow-navigation href="*menu-junction.com*" />

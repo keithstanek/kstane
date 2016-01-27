@@ -363,6 +363,7 @@ function addRow(order) {
 function buildCondimentList(item) {
 	var condimentDictionary = getCondimentDictionary();
 	var returnString = " - ";
+
 	if (item.isCombo === true || item.isCombo == 1) {
 		var groups = item.itemGroups;
 		returnString = ":<br>";

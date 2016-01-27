@@ -25,6 +25,7 @@
 </head><!--/head-->
 
 <body>
+   <script type="text/javascript" src="custom/custom.js"></script>
    <script type="text/javascript" src="cordova.js"></script>
    <script type="text/javascript" src="js/index.js"></script>
    <script type="text/javascript">
@@ -84,7 +85,7 @@
                  <p></p>
                  <p>
                     <!-- <input type="checkbox" id="chkConfirm" checked="false" value="1"> -->
-                    Please review your order for accuracy. Click the buttons below to modify your order.<br>
+                    <input type="checkbox" id="chk-order-confirm">&nbsp;&nbsp;Tap the checkbox to confirm your order is correct<br><br>
                     <a href="view_cart.html" class="btn btn-success">Modify Cart</a>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;<a href="menu.html" class="btn btn-success">Continue Shopping</a>
                  </p>
              </div>
@@ -120,7 +121,7 @@
                         <table>
                            <tr>
                               <td><input type="radio" name="paymentType" onclick="toggleCCDiv();" checked id="rdoPayAtStore" value="pay-at-store">&nbsp;&nbsp;&nbsp;</td>
-                              <td>Pay at store <span style="color: red">** NOTE: You can pay with your credit/debit/gift card at the store.</span></td>
+                              <td>Pay at store <span style="color: red">** NOTE: You can pay with cash or your credit/debit/gift card at the store.</span></td>
                            </tr>
                            <tr>
                               <td><input type="radio" name="paymentType" onclick="toggleCCDiv();" id="rdoCCPayment" value="credit-card">&nbsp;&nbsp;&nbsp;</td>
@@ -349,6 +350,14 @@
       // reset the counter and array
       errorFieldsCounter = 0;
       errorFields = []
+
+      if ( !$("#chk-order-confirm").prop('checked') ) {
+         var displayString = "Please tap the \"My order is correct\" confirmation checkbox under the Order Summary before checking out.";
+         $("#modal-message").html(displayString);
+         $("#checkoutModal").modal('show');
+         $("body").removeClass("loading-checkout");
+         return;
+      }
 
       var email = $("#email").val();
       var name = $("#name").val();

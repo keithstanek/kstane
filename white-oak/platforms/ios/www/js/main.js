@@ -2,15 +2,7 @@
 var condimentDictionary = [];
 var itemDictionary = [];
 
-var categoryPanelBgColor = "fff"; //"fcf8e3";
-var categoryHeaderBgColor = "337ab7";
-var categoryHeaderFontColor = "ffffff";
-var itemPanelBgColor = "F3F3F3";
-var itemHeaderBgColor = "E0A249"; //"00aeef";
-var itemHeaderFontColor = "fff";
 
-var addToCartBtnBgColor = "fcf8e3";
-var addToCartBtnFontColor = "ffffff";
 
 jQuery(function($) {'use strict';
 
@@ -29,7 +21,30 @@ jQuery(function($) {'use strict';
 
 		// on initial load, go get the infomration
 		if (page === "index") {
+			$("#restaurant-name").html(indexHtmlRestaurantName);
 			getRestaurantInfo();
+			return;
+		}
+
+		if (page === "upgrade") {
+			$("#restaurant-name").html(indexHtmlRestaurantName);
+			return;
+		}
+
+		if (page === "intro") {
+			var swiper = new Swiper('.swiper-container', {
+	          pagination: '.swiper-pagination',
+	          paginationClickable: true,
+	          nextButton: '.swiper-button-next',
+	          prevButton: '.swiper-button-prev',
+	          spaceBetween: 30
+	      });
+			$("#restaurant-name").html(indexHtmlRestaurantName);
+			return;
+		}
+
+		if (firstTimeUser()) {
+			window.location.href="intro.html";
 			return;
 		}
 
@@ -99,6 +114,14 @@ jQuery(function($) {'use strict';
 		}
 	});
 });
+
+function firstTimeUser() {
+	var ftu = JSON.parse(window.localStorage.getItem(FIRST_TIME_USER));
+	if (ftu !== null) {
+		return false;
+	}
+	return true;
+}
 
 function loggedIn() {
 	var userInfo = getJsonFromSession(USER_SESSION_KEY);
@@ -198,31 +221,31 @@ function isStoreClosed() {
 	var day = new Date().getDay(); // Sunday is 0, Monday 1 .... Saturday 6
 	var openTime = "", closeTime = "";
 	if (day == 0) {
-		if (closedAllDay(hours.sundayOpenTime, hours.sundayCloseTime)) {return false;}
+		if (closedAllDay(hours.sundayOpenTime, hours.sundayCloseTime)) {return true;}
 		openTime = hours.sundayOpenTime;
 		closeTime = convertTo24HRTimeFormat(hours.sundayCloseTime + " PM");
 	} else if (day == 1) {
-		if (closedAllDay(hours.mondayOpenTime, hours.mondayCloseTime)) {return false;}
+		if (closedAllDay(hours.mondayOpenTime, hours.mondayCloseTime)) {return true;}
 		openTime = hours.mondayOpenTime;
 		closeTime = convertTo24HRTimeFormat(hours.mondayCloseTime + " PM");
 	} else if (day == 2) {
-		if (closedAllDay(hours.tuesdayOpenTime, hours.tuesdayCloseTime)) {return false;}
+		if (closedAllDay(hours.tuesdayOpenTime, hours.tuesdayCloseTime)) {return true;}
 		openTime = hours.tuesdayOpenTime;
 		closeTime = convertTo24HRTimeFormat(hours.tuesdayCloseTime + " PM");
 	} else if (day == 3) {
-		if (closedAllDay(hours.wednesdayOpenTime, hours.wednesdayCloseTime)) {return false;}
+		if (closedAllDay(hours.wednesdayOpenTime, hours.wednesdayCloseTime)) {return true;}
 		openTime = hours.wednesdayOpenTime;
 		closeTime = convertTo24HRTimeFormat(hours.wednesdayCloseTime + " PM");
 	} else if (day == 4) {
-		if (closedAllDay(hours.thursdayOpenTime, hours.thursdayCloseTime)) {return false;}
+		if (closedAllDay(hours.thursdayOpenTime, hours.thursdayCloseTime)) {return true;}
 		openTime = hours.thursdayOpenTime;
 		closeTime = convertTo24HRTimeFormat(hours.thursdayCloseTime + " PM");
 	} else if (day == 5) {
-		if (closedAllDay(hours.fridayOpenTime, hours.fridayCloseTime)) {return false;}
+		if (closedAllDay(hours.fridayOpenTime, hours.fridayCloseTime)) {return true;}
 		openTime = hours.fridayOpenTime;
 		closeTime = convertTo24HRTimeFormat(hours.fridayCloseTime + " PM");
 	} else if (day == 6) {
-		if (closedAllDay(hours.saturdayOpenTime, hours.saturdayCloseTime)) {return false;}
+		if (closedAllDay(hours.saturdayOpenTime, hours.saturdayCloseTime)) {return true;}
 		openTime = hours.saturdayOpenTime;
 		closeTime = convertTo24HRTimeFormat(hours.saturdayCloseTime + " PM");
 	}
@@ -388,6 +411,7 @@ function getRestaurantInfo() {
       success: function(data) {
          //alert(data);
          var response = JSON.parse(data);
+
          var categoryList = response.menu.categories;
          var condiments = response.condiments;
 
@@ -408,6 +432,14 @@ function getRestaurantInfo() {
 
 			addJsonToSession(RESTAURANT_LIST_SESSION_KEY, response.restaurants);
          addJsonToSession(CONDIMENT_LIST_SESSION_KEY, condimentDictionary);
+
+			// first check the version number to see if they need to update, if so, send them
+			// to the update pago to notify the user
+			// KAS - Comment out for now since I can't figure out the  update button and we need to get the app out there
+			if (APPLICATION_VERSION_NUMBER < Number(response.versionNo)) {
+				//window.location.href = "upgrade.html";
+				//return;
+			}
 
 			var redirectPage = getVarFromSession(CURRENT_PAGE_SESSION_KEY);
 			if (redirectPage !== null && redirectPage !== "") {
